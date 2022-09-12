@@ -13,5 +13,5 @@ Everything I did in My Third Year as a Computer and Telematics Engineering Stude
 - Compiladores (CO)
 - Opção I
 
-# Aual
+# Anual
 - Projeto em Engenharia de Computadores e Informática
