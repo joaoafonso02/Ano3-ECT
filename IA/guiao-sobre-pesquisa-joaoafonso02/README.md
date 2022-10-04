@@ -22,6 +22,8 @@ pip install -r requirements.txt
 5. Teste a sua solução.
 ```bash
 pytest
+<<<<<<< HEAD
+=======
 ```
 
 6. Adicione o repositorio do professor como upstream.
@@ -35,3 +37,4 @@ git fetch upstream
 git merge upstream/master
 ```
 
+>>>>>>> upstream/master

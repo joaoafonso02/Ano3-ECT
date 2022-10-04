@@ -1,10 +1,15 @@
 #Exercicio 1.1
 def comprimento(lista):
-
+<<<<<<< HEAD
+	if lista == []:
+		return 0
+	return 1 + comprimento(lista[1:])
+=======
     if lista == []:
         return 0
 
     return 1 + comprimento(lista[1:])
+>>>>>>> upstream/master
 
 #Exercicio 1.2
 def soma(lista):
@@ -43,9 +48,15 @@ def capicua(lista):
 	return capicua(lista[1:-1])
 
 #Exercicio 1.7
-
+<<<<<<< HEAD
+def explode(lista):
+	if not lista: 
+		return lista
+	return lista[:1][0] + explode(lista[1:])
+=======
 def concat_listas(lista):
 	pass
+>>>>>>> upstream/master
 
 #Exercicio 1.8
 def substitui(lista, original, novo):
@@ -57,12 +68,31 @@ def substitui(lista, original, novo):
 		return lista[:1] + substitui(lista[1:], original, novo)
 
 #Exercicio 1.9
+<<<<<<< HEAD
+def junta_ordenado(lista1, lista2):
+	if not lista1:
+		return lista2
+	if not lista2:
+		return lista1
+	if lista1[0] < lista2[0]:
+		return lista1[:1] + junta_ordenado(lista1[1:], lista2)
+	else:
+		return lista2[:1] + junta_ordenado(lista1, lista2[1:])
+
+
+#Exercicio 1.10
+def lista_subconjuntos(lista):
+	pass
+
+=======
 def fusao_ordenada(lista1, lista2):
 	pass
 
 #Exercicio 1.10
 def lista_subconjuntos(lista):
 	pass
+
+>>>>>>> upstream/master
 
 #Exercicio 2.1
 def separar(lista):
