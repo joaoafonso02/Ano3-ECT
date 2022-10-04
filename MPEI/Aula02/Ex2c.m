@@ -2,10 +2,10 @@
 
 dardos = [10:10:100];
 alvos = [1e3 1e5];
-N = 1e6;
+N = 1e4;
 
 for g = 1:2              % g =1:2 porque vamos fazer 2 graficos
-  subplot(2,2,g);      % subplot(2,2,g) porque
+  subplot(1,2,g);      % subplot(2,2,g) porque
   probs = 0*dardos;    % probs = [0,0,0] nr de diferentes instancias de dardos(neste caso 10)
   for i = 1:length(dardos)  %for i=1:10
     probs(i) =  1 - alvoCalc(dardos(i), N, alvos(g)); %prob(i) = 1 - (prob de nunca repetir)
