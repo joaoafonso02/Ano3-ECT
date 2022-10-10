@@ -10,6 +10,7 @@
 #
 
 
+from tkinter.messagebox import NO
 from tree_search import *
 
 class Cidades(SearchDomain):
@@ -29,7 +30,10 @@ class Cidades(SearchDomain):
         if C1==city:
             return C2
     def cost(self, city, action):
-        pass
+        for (C1, C2, D) in self.connections:
+            if (C1, C2) == action or (C1, C2) == action:
+                return D
+        return None
     def heuristic(self, city, goal_city):
         pass
     def satisfies(self, city, goal_city):

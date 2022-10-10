@@ -62,9 +62,10 @@ class SearchProblem:
 
 # Nos de uma arvore de pesquisa
 class SearchNode:
-    def __init__(self,state,parent): 
+    def __init__(self,state,parent, depth = 0): 
         self.state = state
         self.parent = parent
+        self.depth = depth
     def __str__(self):
         return "no(" + str(self.state) + "," + str(self.parent) + ")"
     def __repr__(self):
@@ -72,7 +73,14 @@ class SearchNode:
 
 # Arvores de pesquisa
 class SearchTree:
+    # length
+    @property   # 3rd ex
+    def length(self):
+        return self.solution.depth
 
+    @property
+    def avg_branching(self):
+        return round((self.terminals + self.non_terminals-1) / self.non_terminals, 2)
     # construtor
     def __init__(self,problem, strategy='breadth'): 
         self.problem = problem
@@ -80,6 +88,8 @@ class SearchTree:
         self.open_nodes = [root]
         self.strategy = strategy
         self.solution = None
+        self.non_terminals = 0
+        self.terminals = 1
 
     # obter o caminho (sequencia de estados) da raiz ate um no
     def get_path(self,node):
@@ -90,18 +100,26 @@ class SearchTree:
         return(path)
 
     # procurar a solucao
-    def search(self):
+    def search(self, limit = None):
+        self.non_terminals = 0  # 5th ex
+        self.terminals = 1
         while self.open_nodes != []:
             node = self.open_nodes.pop(0)
+            if limit and node.depth > limit:    # 4th ex
+                self.terminals -= 1
+                continue
             if self.problem.goal_test(node.state):
                 self.solution = node
                 return self.get_path(node)
+            self.non_terminals += 1
+            self.terminals -= 1
             lnewnodes = []
             for a in self.problem.domain.actions(node.state):
                 newstate = self.problem.domain.result(node.state,a)
-                newnode = SearchNode(newstate,node)
-                lnewnodes.append(newnode)
-                print(newnode)
+                newnode = SearchNode(newstate,node, node.depth+1)   # 2nd ex
+                if newnode.state not in self.get_path(node):        # 1st ex
+                    self.terminals += 1
+                    lnewnodes.append(newnode)
             self.add_to_open(lnewnodes)
         return None
 
