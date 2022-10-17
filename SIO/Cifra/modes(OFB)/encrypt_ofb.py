@@ -1,10 +1,13 @@
+import os
+from pickle import TRUE
 import sys
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives import padding
 
-unpadder = padding.PKCS7(128).unpadder()
+padder = padding.PKCS7(128).padder()
+
 
 def main():
     # ver parametros do programa
@@ -25,27 +28,23 @@ def main():
 
     key = kdf.derive( sys.argv[1].encode("utf-8") )
 
+    iv = os.urandom(18) # generate random IV
+
     cipher = Cipher(algorithms.AES(key), modes.OFB())
-    decryptor = cipher.decryptor()
+    encryptor = cipher.encryptor()
 
     in_file = open(sys.stdin.fileno(), "rb")
     out_file = open(sys.stdout.fileno(), "wb")
 
+    out_file.write(iv)
+    
     while True:
-        data = in_file.read(16)
-        if len(data)==0:
-            data = unpadder.finalize()
-            out_file.write(data)
-            break
-        elif len(data) < 16:
-            print("wrong file length")
+        data = in_file.read(8192) # 8 x 1024 = 8192
+        if len(data) == 0:
             break
 
-        data = decryptor.update(data)
-        data = unpadder.update(data)
-        
-        if len(data)!=0:
-            out_file.write(data)
+        data = encryptor.update(data)
+        out_file.write(data)
 
     sys.exit(0)
 
