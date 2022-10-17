@@ -27,5 +27,5 @@ dd if=criptograma bs=1 count=1663 | ./decrypt.py senha /dev/null
 ./encrypt_ofb.py senha < encrypt.py> | dd bs=1 skip=1 | encrypt_ofb.py senha | less
 ```
 
-```se se perder o inicio, irá se perder o IV, o CFB dá lixo, CFB permite o autosincronismo, permite recuperar perdas da unidade de feedback```
+Se se perder o inicio, irá se perder o IV, o CFB dá lixo, CFB permite o autosincronismo, permite recuperar perdas da unidade de feedback
 
