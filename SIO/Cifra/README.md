@@ -18,8 +18,10 @@ dd if=criptograma bs=1 count=1663 | ./decrypt.py senha /dev/null
 ```16 bytes sao de IV```
 
 ```bash
-./encrypt_ofb.py senha < encrypt.py> | dd bs=1 count=32 | encrypt_ofb.py senha | less  # se perder o fim, OFB u CFB é igual 
+./encrypt_ofb.py senha < encrypt.py> | dd bs=1 count=32 | encrypt_ofb.py senha | less  
 ````
+
+Se perder o fim, OFB u CFB é igual
 
 ```bash
 ./encrypt_ofb.py senha < encrypt.py> | dd bs=1 skip=1 | encrypt_ofb.py senha | less
