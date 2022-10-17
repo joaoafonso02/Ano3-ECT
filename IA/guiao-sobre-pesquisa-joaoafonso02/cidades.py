@@ -10,6 +10,8 @@
 #
 
 
+from math import hypot
+import math
 from tkinter.messagebox import NO
 from tree_search import *
 
@@ -30,18 +32,22 @@ class Cidades(SearchDomain):
         if C1==city:
             return C2
     def cost(self, city, action):
+        A1, A2 = action
         for (C1, C2, D) in self.connections:
-            if (C1, C2) == action or (C1, C2) == action:
+            if (C1 == A1 and C2 == A2) or (C2 == A1 and C1 == A2):
                 return D
         return None
     def heuristic(self, city, goal_city):
-        pass
+        x1, y1 = self.coordinates[city]
+        x2, y2 =  self.coordinates[goal_city]
+        return math.hypot(x1-x2, y1-y2)
+
     def satisfies(self, city, goal_city):
         return goal_city==city
 
 
 cidades_portugal = Cidades( 
-                    # Ligacoes por estrada
+                    # CONNECTIONS por estrada
                     [
                       ('Coimbra', 'Leiria', 73),
                       ('Aveiro', 'Agueda', 35),

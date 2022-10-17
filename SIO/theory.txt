@@ -1,0 +1,13 @@
+Cypher Modes: 	ECB, CBC - Refinary. Diferença: CBC evita propagação de padroesy
+		estes de cima ==> (implicam) padding PKCS#7)
+
+		OFB - output
+		CFB - cypher
+		CTR
+		GCM	
+todos usam IV no processo
+
+Página Mem. 	- 4 KiB
+Bloco Ficheiro 	- 8 KiB
+
+Discos estão divididos em Setores -> Pistas -> Cilindros	

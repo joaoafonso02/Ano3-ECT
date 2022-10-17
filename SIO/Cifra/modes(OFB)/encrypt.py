@@ -27,7 +27,7 @@ def main():
 
     key = kdf.derive( sys.argv[1].encode("utf-8") )
 
-    cipher = Cipher(algorithms.AES(key), modes.ECB())
+    cipher = Cipher(algorithms.AES(key), modes.OFB())
     encryptor = cipher.encryptor()
 
     padder = padding.PKCS7(128).padder()
@@ -35,15 +35,11 @@ def main():
     in_file = open(sys.stdin.fileno(), "rb")
     out_file = open(sys.stdout.fileno(), "wb")
 
-    eof = False
-    while not eof:
+    while True:
         data = in_file.read(16)
-        if len(data) < 16:
-            data = padder.update(data)
-            data = padder.finalize()
-            eof = True
-        # else:
-        #     data = padder.update(data)
+        if len(data) == 0:
+            break
+
         data = encryptor.update(data)
         out_file.write(data)
 

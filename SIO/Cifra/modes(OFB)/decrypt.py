@@ -1,12 +1,10 @@
-from pickle import TRUE
 import sys
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives import padding
 
-padder = padding.PKCS7(128).padder()
-
+unpadder = padding.PKCS7(128).unpadder()
 
 def main():
     # ver parametros do programa
@@ -27,25 +25,27 @@ def main():
 
     key = kdf.derive( sys.argv[1].encode("utf-8") )
 
-    cipher = Cipher(algorithms.AES(key), modes.ECB())
-    encryptor = cipher.encryptor()
-
-    padder = padding.PKCS7(128).padder()
+    cipher = Cipher(algorithms.AES(key), modes.OFB())
+    decryptor = cipher.decryptor()
 
     in_file = open(sys.stdin.fileno(), "rb")
     out_file = open(sys.stdout.fileno(), "wb")
 
-    eof = False
-    while not eof:
+    while True:
         data = in_file.read(16)
-        if len(data) < 16:
-            data = padder.update(data)
-            data = padder.finalize()
-            eof = True
-        # else:
-        #     data = padder.update(data)
-        data = encryptor.update(data)
-        out_file.write(data)
+        if len(data)==0:
+            data = unpadder.finalize()
+            out_file.write(data)
+            break
+        elif len(data) < 16:
+            print("wrong file length")
+            break
+
+        data = decryptor.update(data)
+        data = unpadder.update(data)
+        
+        if len(data)!=0:
+            out_file.write(data)
 
     sys.exit(0)
 
