@@ -1,24 +1,22 @@
 {\rtf1\ansi\ansicpg1252\cocoartf2636
-\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
-{\colortbl;\red255\green255\blue255;}
-{\*\expandedcolortbl;;}
-\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fswiss\fcharset0 Helvetica-Bold;}
+{\colortbl;\red255\green255\blue255;\red26\green26\blue26;\red255\green255\blue255;}
+{\*\expandedcolortbl;;\cssrgb\c13333\c13333\c13333;\cssrgb\c100000\c100000\c100000;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww12400\viewh10080\viewkind0
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
 \f0\fs28 \cf0 getpid\
 \
 getppid\
 \
-\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
-\cf0 execl\
+execl\
 \
 wait / pwait\
 \
 waitpid / pwaitpid\
 \
 kill / pkill\
-\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
-\cf0 \
+\
 fork/gfork -> faz com que o processo seja copiado, fun\'e7\'e3o q se chama 1x e devolve 2x. Uma para o processo pai outra para o processo filho\
 \
 Busy waiting -> esperar sem libertar o CPU	\
@@ -32,4 +30,55 @@ Commands:\
 \
 \
 \
-O numero de argumentos \'e9 pelo menos 1 em c. Com execl aparece sempre o nome do caminho/ file + argumentos(se tiver)}
+O numero de argumentos \'e9 pelo menos 1 em c. Com execl aparece sempre o nome do caminho/ file + argumentos(se tiver)\
+\
+\
+Programa\'e7\'e3o Concorrente com threads\
+\
+
+\f1\b Process id
+\f0\b0  identifica o processo\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 A 
+\f1\b thread
+\f0\b0  is a unit of execution on concurrent programming. Multithreading is a technique which allows a CPU to execute many tasks of one process at the same time. These threads can execute individually while sharing their resources2
+\fs36 \
+
+\fs28 \cf0 \cb1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f1\b \cf0 pthread_t
+\f0\b0  identifica uma thread\
+	- thread_create para criar uma thread\
+\
+
+\f1\b pthread_join
+\f0\b0  \'97> void **retval - refer\'eancia para um ponteiro\
+\
+Se a thread mata o processo com exit(
+\f1\b pthread_exit
+\f0\b0 ), acabou, n ha mais threads, tudo terminado.\
+\
+N\'e3o ha rela\'e7\'e3o de parentesco nas threads\
+\
+Comunica\'e7\'e3o por mem\'f3ria partilhada - sem\'e1foros, definir regi\'f5es criticas, so 1 entidade ativa \'e9 q executa\
+\
+Sincroniza\'e7\'e3o com threads \'e9 mt + alto n\'edvel q sem\'e1foros\
+NINGUEM \'c9 DONO DE UM SEM\'c1FORO\
+\
+MUTEX, quando entrar na sec\'e7\'e3o critica faz lock, quando sai unlocked (tipo uma porta)\
+HA DONOS DE MUTEX\
+\
+cvar - conditional variable\
+\
+Thread-safe functions:\
+	- usleep\
+	- nanosleep\
+	- rand_r\
+\
+\
+\
+\
+}
