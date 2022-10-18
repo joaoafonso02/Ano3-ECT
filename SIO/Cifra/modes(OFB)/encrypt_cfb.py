@@ -30,7 +30,7 @@ def main():
 
     iv = os.urandom(18) # generate random IV
 
-    cipher = Cipher(algorithms.AES(key), modes.CFB())
+    cipher = Cipher(algorithms.AES(key), modes.CFB(iv))
     encryptor = cipher.encryptor()
 
     in_file = open(sys.stdin.fileno(), "rb")

@@ -1,3 +1,4 @@
+
 import os
 from pickle import TRUE
 import sys
@@ -28,9 +29,9 @@ def main():
 
     key = kdf.derive( sys.argv[1].encode("utf-8") )
 
-    iv = os.urandom(18) # generate random IV
+    iv = os.urandom(16) # generate random IV
 
-    cipher = Cipher(algorithms.AES(key), modes.OFB())
+    cipher = Cipher(algorithms.AES(key), modes.OFB(iv))
     encryptor = cipher.encryptor()
 
     in_file = open(sys.stdin.fileno(), "rb")

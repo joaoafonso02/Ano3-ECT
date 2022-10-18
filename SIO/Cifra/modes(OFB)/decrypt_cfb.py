@@ -32,7 +32,7 @@ def main():
 
     iv = in_file.read(16)
     
-    cipher = Cipher(algorithms.AES(key), modes.CFB())
+    cipher = Cipher(algorithms.AES(key), modes.CFB(iv))
     decryptor = cipher.decryptor()
 
     while True:
