@@ -12,6 +12,8 @@
 #
 
 
+from hashlib import new
+from tkinter import N
 from tree_search import *
 from functools import reduce
 from itertools import product
@@ -26,6 +28,10 @@ class Predicate:
         return str(self)
     def __eq__(self,predicate):   # allows for comparisons with "==", etc.
         return str(self)==str(predicate)
+
+    def __hash__(self) -> int:
+        return hash(str(self))
+
     def substitute(self,assign): # Substitute the arguments in a predicate
         la = self.args          # by constants according to a given 
         if len(la)==0:         # assignment (i.e. a dictionary)
@@ -93,7 +99,12 @@ class STRIPS(SearchDomain):
     # Result of a given "action" in a given "state"
     # ( returns None, if the action is not applicable in the state)
     def result(self, state, action):
-        pass
+        if (p not in state for p in action.pc):
+            return None
+
+        newState = [i for i in state if i not in action.neg]
+        newState.extend(action.pos)
+        return newState
 
     def cost(self, state, action):
         return 1
@@ -103,7 +114,7 @@ class STRIPS(SearchDomain):
 
     # Checks if a given "goal" is satisfied in a given "state"
     def satisfies(self, state, goal):
-        pass
+        return set(state) == set(goal)
 
 
 

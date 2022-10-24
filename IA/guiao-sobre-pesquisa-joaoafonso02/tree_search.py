@@ -13,7 +13,6 @@
 #  Inteligência Artificial, 2014-2019
 
 from abc import ABC, abstractmethod
-from curses import keyname
 
 # Dominios de pesquisa
 # Permitem calcular
@@ -171,5 +170,4 @@ class SearchTree:
 
 
     
-
 
