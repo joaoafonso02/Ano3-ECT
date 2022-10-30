@@ -15,7 +15,7 @@ python3 pub_enc.py keypair.pem
 python3 pub_enc.py keypair.pem < input 
 ```
 
-``bash
+```bash
 python3 pub_enc.py keypair.pem < input > output2
 ````
 
