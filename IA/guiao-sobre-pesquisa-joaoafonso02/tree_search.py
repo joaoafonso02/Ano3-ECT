@@ -117,9 +117,12 @@ class SearchTree:
         self.terminals = 1
         while self.open_nodes != []:
             node = self.open_nodes.pop(0)
+
+            # determinate if it has a higher acc cost or not
             if limit and node.depth > limit:    # 4th ex
                 self.terminals -= 1
                 continue
+
             if self.problem.goal_test(node.state):
                 self.solution = node
                 max_cost = self.open_nodes[-1].cost
@@ -128,6 +131,7 @@ class SearchTree:
                         break
                     self.highest_cost_nodes = [i] + self.highest_cost_nodes
                 parent = node
+                
                 while parent:
                     self.plan = [parent.action] + self.plan
                     parent = parent.parent

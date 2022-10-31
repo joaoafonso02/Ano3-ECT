@@ -1,6 +1,12 @@
 # iia-ia-guiao-python
 Programação ao Estilo Funcional em Python
 
+
+# Como executar os exercícios
+
+```bash
+pytest tests/test_strips.py::test_exercicio1 -v
+```
 # Como resolver o guião
 1. Crie um virtual environment:
 ```bash
@@ -11,6 +17,8 @@ python3 -m venv venv
 ```bash
 source venv/bin/activate
 ```
+
+
 
 3. Instale os requisitos:
 ```bash

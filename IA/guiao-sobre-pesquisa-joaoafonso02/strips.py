@@ -29,7 +29,7 @@ class Predicate:
     def __eq__(self,predicate):   # allows for comparisons with "==", etc.
         return str(self)==str(predicate)
 
-    def __hash__(self) -> int:
+    def __hash__(self):
         return hash(str(self))
 
     def substitute(self,assign): # Substitute the arguments in a predicate
@@ -99,12 +99,14 @@ class STRIPS(SearchDomain):
     # Result of a given "action" in a given "state"
     # ( returns None, if the action is not applicable in the state)
     def result(self, state, action):
-        if (p not in state for p in action.pc):
+        # Pre - Conditions
+        if any(p not in state for p in action.pc):
             return None
-
-        newState = [i for i in state if i not in action.neg]
-        newState.extend(action.pos)
-        return newState
+        # remove negs
+        newstate = [p for p in state if p not in action.neg]
+        # add positives
+        newstate.extend(action.pos)
+        return set(newstate)
 
     def cost(self, state, action):
         return 1
@@ -114,7 +116,8 @@ class STRIPS(SearchDomain):
 
     # Checks if a given "goal" is satisfied in a given "state"
     def satisfies(self, state, goal):
-        return set(state) == set(goal)
+        return (p in state for p in goal)
+
 
 
 
