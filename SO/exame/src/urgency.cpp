@@ -61,11 +61,14 @@ HospitalData * hd = NULL;
 int random_manchester_triage_priority();
 void new_patient(Patient* patient); // initializes a new patient
 void random_wait();
+void* patient_life(void* arg);
+void* nurse_routine(void* arg);
+void* doctor_routine(void* arg);
 
 /* ************************************************* */
 
 /* changes may be required to this function */
-void init_simulation(uint32_t np)
+void init_simulation(uint32_t np, uint32_t nnurses, uint32_t ndoctors)
 {
    printf("Initializing simulation\n");
    hd = (HospitalData*)mem_alloc(sizeof(HospitalData)); // mem_alloc is a malloc with NULL pointer verification
@@ -73,6 +76,38 @@ void init_simulation(uint32_t np)
    hd->num_patients = np;
    init_pfifo(&hd->triage_queue);
    init_pfifo(&hd->doctor_queue);
+
+   // start nurses threads and life cycles 
+   pthread_t nurses[nnurses];
+   for(uint32_t i = 0; i < nnurses; i++) {
+      pthread_create(&nurses[i], NULL, nurse_routine, NULL);
+   }
+
+   // start doctors threads and life cycles //
+   pthread_t doctors[nnurses];
+   for(uint32_t i = 0; i < nnurses; i++) {
+      pthread_create(&doctors[i], NULL, nurse_routine, NULL);
+   }
+
+   // add patients to queues
+   pthread_t patients[np];
+   uint32_t patients_ids[np];
+   for(uint32_t i = 0; i < np; i++) {
+      patients_ids[i] = i;
+      pthread_create(&patients[i], NULL, patient_life, (void*) &patients_ids[i]);
+   }
+
+   // join patients
+   for(uint32_t i = 0; i < np; i++) {
+      pthread_join(patients[i], NULL);
+   }
+
+   for(uint32_t i = 0; i < nnurses; i++) {
+      pthread_cancel(nurses[i]);
+   }
+
+
+
 }
 
 /* ************************************************* */
@@ -115,17 +150,25 @@ void patient_goto_urgency(int id)
 void patient_wait_end_of_consultation(int id)
 {
    check_valid_name(hd->all_patients[id].name);
+   // while( hd->all_patients[id].done!=1 ); --> WRONG
    printf("\e[30;01mPatient %s (number %u): health problems treated\e[0m\n", hd->all_patients[id].name, id);
 }
 
 /* changes are required to this function */
 void patient_life(int id)
 {
+   // patient_goto_urgency(id);
+   // nurse_iteration();  // to be deleted in concurrent version
+   // doctor_iteration(); // to be deleted in concurrent version
+   // patient_wait_end_of_consultation(id);
+   // memset(&(hd->all_patients[id]), 0, sizeof(Patient)); // patient finished
+   
    patient_goto_urgency(id);
-   nurse_iteration();  // to be deleted in concurrent version
-   doctor_iteration(); // to be deleted in concurrent version
+   // nurse_iteration();  // to be deleted in concurrent version
+   // doctor_iteration(); // to be deleted in concurrent version
    patient_wait_end_of_consultation(id);
    memset(&(hd->all_patients[id]), 0, sizeof(Patient)); // patient finished
+   return;
 }
 
 /* ************************************************* */
@@ -180,7 +223,7 @@ int main(int argc, char *argv[])
    srand(getpid());
 
    /* init simulation */
-   init_simulation(npatients);
+   init_simulation(npatients, nnurses, ndoctors);
 
    /* dummy code to show a very simple sequential behavior */
    for(uint32_t i = 0; i < npatients; i++)

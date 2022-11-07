@@ -11,3 +11,10 @@ Página Mem. 	- 4 KiB
 Bloco Ficheiro 	- 8 KiB
 
 Discos estão divididos em Setores -> Pistas -> Cilindros	
+
+Pem(Texto) usa
+base 64 - forma binária de codificação (6 bits) 
+
+Extênsão crítica nao pode ser ignorada, software n pode ignorar, tem q usar certificado digital de  chaves públicas
+
+
