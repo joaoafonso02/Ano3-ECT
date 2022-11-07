@@ -1,5 +1,6 @@
 #!bin/python
 import sys
+from colorama import Fore, Back, Style # prettier,  # delete 
 from cryptography import x509
 from cryptography.x509 import ObjectIdentifier
 
@@ -7,9 +8,18 @@ def validity( cert ):
     print("%s" % (cert.subject))
     print("\tbegin = %s" % (cert.not_valid_before))
     print("\tend = %s" % (cert.not_valid_after))
-    # print('\textensions = ')
-    # print( cert.extensions )
-    ext = cert.extensions.get_extension_for_old( ObjectIdentifier('2.5.29.19') )
+    
+    ext = cert.extensions.get_extension_for_oid( ObjectIdentifier('2.5.29.19') )
+    if ( ext.value.ca == True):
+        if cert.issuer == cert.subject:
+            print( Fore.CYAN + '\tRoot CA Certificate' ) # delete Fore 
+        else:
+            print( Fore.GREEN + '\tIntermediate CA Certificate' ) # delete Fore
+    else:
+        print( Fore.RED + '\tEnd Entity Certificate')  # delete Fore
+    
+    print(Style.RESET_ALL)  # delete 
+    #print("Extension= %s" % ext)
 def main():
     if len(sys.argv) == 1:
         fd = open(sys.stdin.fileno(), 'rb')
