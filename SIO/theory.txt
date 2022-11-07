@@ -17,4 +17,5 @@ base 64 - forma binária de codificação (6 bits)
 
 Extênsão crítica nao pode ser ignorada, software n pode ignorar, tem q usar certificado digital de  chaves públicas
 
-
+Um cetificado expirado é inutil? Não, porque o prazo de validade nao diz a o certificado é "peixe podre", diz q a associação e a chave so é valido nesse intervalo
+Nao perde interesse, pq permite validar assinaturas digitais feitas anteriormente. Depois de expirado, posso validar assinaturas na altura criadas.
