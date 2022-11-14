@@ -41,16 +41,16 @@ typedef struct
 {
    char name[MAX_NAME+1];
    int done; // 0: waiting for consultation; 1: consultation finished
-   pthread_mutex_t mutex;
-   pthread_cond_t treated;
+   pthread_mutex_t mutex; // new
+   pthread_cond_t treated; // new
 } Patient;
 
 typedef struct
 {
     int num_patients;
     Patient all_patients[MAX_PATIENTS];
-    PriorityFIFO triage_queue;
-    PriorityFIFO doctor_queue;
+    PriorityFIFO triage_queue; // new
+    PriorityFIFO doctor_queue; // new
 } HospitalData;
 
 HospitalData * hd = NULL;
@@ -63,15 +63,15 @@ HospitalData * hd = NULL;
 int random_manchester_triage_priority();
 void new_patient(Patient* patient); // initializes a new patient
 void random_wait();
-void* patient_life(void* arg);
-void* nurse_life(void* arg);
-void* doctor_life(void* arg);
+void* patient_life(void* arg); // new
+void* nurse_life(void* arg); // new
+void* doctor_life(void* arg); // new
 
 
 /* ************************************************* */
 
 /* changes may be required to this function */
-void init_simulation(uint32_t npatients, uint32_t nnurses, uint32_t ndoctors)
+void init_simulation(uint32_t npatients)
 {
    printf("Initializing simulation\n");
    hd = (HospitalData*)mem_alloc(sizeof(HospitalData)); // mem_alloc is a malloc with NULL pointer verification
@@ -80,52 +80,6 @@ void init_simulation(uint32_t npatients, uint32_t nnurses, uint32_t ndoctors)
    init_pfifo(&hd->triage_queue);
    init_pfifo(&hd->doctor_queue);
 
-   // start nurses threads
-   pthread_t nurses[nnurses];
-   for (uint32_t i = 0; i < nnurses; i++) {
-      pthread_create(&nurses[i], NULL, nurse_life, NULL);
-   }
-
-   // start doctors threads
-   pthread_t doctors[ndoctors];
-   for (uint32_t i = 0; i < ndoctors; i++) {
-      pthread_create(&doctors[i], NULL, doctor_life, NULL);
-   }
-
-   // add patients
-   pthread_t patients[npatients];
-   uint32_t patients_ids[npatients];
-   for (uint32_t i = 0; i < npatients; i++) {
-      patients_ids[i] = i;
-      pthread_create(&patients[i], NULL, patient_life, (void*) &patients_ids[i]);
-   }
-
-   // end patients treads
-   for (uint32_t i = 0; i < npatients; i++) {
-      pthread_join(patients[i], NULL);
-   }
-
-   printf("---------------ALL PATIENTS TREATED---------------\n");
-   fflush(stdout);
-
-    /* send finished call to nurses and doctors*/
-   for (uint32_t i = 0; i < nnurses; i++) {
-      insert_pfifo(&hd->triage_queue, MAX_PATIENTS, 1);
-   }
-
-   for (uint32_t i = 0; i < ndoctors; i++) {
-      insert_pfifo(&hd->doctor_queue, MAX_PATIENTS, 1);
-   }
-
-   // end nurses treads
-   for (uint32_t i = 0; i < nnurses; i++) {
-      pthread_join(nurses[i], NULL);
-   }
-
-   // end doctors treads
-   for (uint32_t i = 0; i < ndoctors; i++) {
-      pthread_join(doctors[i], NULL);
-   }
 
 
 }
@@ -137,7 +91,7 @@ void nurse_iteration()
    printf("\e[34;01mNurse: get next patient\e[0m\n");
    uint32_t patient = retrieve_pfifo(&hd->triage_queue);
 
-   if (patient==MAX_PATIENTS) pthread_exit(0);
+   if (patient==MAX_PATIENTS) pthread_exit(0); // new
 
    printf("[Nurse] patient recieved %d\n", patient);
    check_valid_patient(patient);
@@ -146,10 +100,10 @@ void nurse_iteration()
    printf("\e[34;01mNurse: add patient %u with priority %u to doctor queue\e[0m\n", patient, priority);
    insert_pfifo(&hd->doctor_queue, patient, priority);
 }
-void* nurse_life(void *arg)
+void* nurse_life(void *arg) // new
 {
-   while( 1 ) {
-      nurse_iteration();
+   while( 1 ) { // new
+      nurse_iteration(); // new
    }
 }
 
@@ -160,20 +114,21 @@ void doctor_iteration()
    printf("\e[32;01mDoctor: get next patient\e[0m\n");
    uint32_t patient = retrieve_pfifo(&hd->doctor_queue);
 
-   if (patient==MAX_PATIENTS) pthread_exit(0);
+   if (patient==MAX_PATIENTS) pthread_exit(0); // new
 
    check_valid_patient(patient);
    printf("\e[32;01mDoctor: treat patient %u\e[0m\n", patient);
    random_wait();
    printf("\e[32;01mDoctor: patient %u treated\e[0m\n", patient);
    hd->all_patients[patient].done = 1;
-   pthread_cond_broadcast(&hd->all_patients[patient].treated);
+
+   pthread_cond_broadcast(&hd->all_patients[patient].treated); // new
    
 }
-void* doctor_life(void *arg)
+void* doctor_life(void *arg) // new
 {
-   while( 1 ) {
-      doctor_iteration();
+   while( 1 ) { // new
+      doctor_iteration(); // new
    }
 }
 
@@ -192,21 +147,21 @@ void patient_wait_end_of_consultation(int id)
 {
    check_valid_name(hd->all_patients[id].name);
 
-   pthread_mutex_lock(&hd->all_patients[id].mutex);
+   pthread_mutex_lock(&hd->all_patients[id].mutex); // new
 
-   while( hd->all_patients[id].done!=1 ) {
-      pthread_cond_wait(&hd->all_patients[id].treated, &hd->all_patients[id].mutex);
+   while( hd->all_patients[id].done!=1 ) { // new
+      pthread_cond_wait(&hd->all_patients[id].treated, &hd->all_patients[id].mutex); // new
    }
    
-   pthread_mutex_unlock(&hd->all_patients[id].mutex);
+   pthread_mutex_unlock(&hd->all_patients[id].mutex); // new
 
    printf("\e[30;01mPatient %s (number %u): health problems treated\e[0m\n", hd->all_patients[id].name, id);
 }
 
 /* changes are required to this function */
-void* patient_life(void* arg)
+void* patient_life(void* arg) // new
 {
-   uint32_t id = *(uint32_t*) arg;
+   uint32_t id = *(uint32_t*) arg; // new
    patient_goto_urgency(id);
    patient_wait_end_of_consultation(id);
    memset(&(hd->all_patients[id]), 0, sizeof(Patient)); // patient finished
@@ -264,7 +219,55 @@ int main(int argc, char *argv[])
    srand(getpid());
 
    /* init simulation */
-   init_simulation(npatients, nnurses, ndoctors);
+   init_simulation(npatients); // new
+
+
+   // start nurses threads  
+   pthread_t nurses[nnurses]; // new
+   for (uint32_t i = 0; i < nnurses; i++) { // new
+      pthread_create(&nurses[i], NULL, nurse_life, NULL); // new
+   }
+
+   // start doctors threads
+   pthread_t doctors[ndoctors]; // new
+   for (uint32_t i = 0; i < ndoctors; i++) { // new
+      pthread_create(&doctors[i], NULL, doctor_life, NULL); // new
+   }
+
+   // add patients
+   pthread_t patients[npatients]; // new
+   uint32_t patients_ids[npatients]; // new
+   for (uint32_t i = 0; i < npatients; i++) { // new
+      patients_ids[i] = i; // new
+      pthread_create(&patients[i], NULL, patient_life, (void*) &patients_ids[i]); // new
+   }
+
+   // end patients treads
+   for (uint32_t i = 0; i < npatients; i++) { // new
+      pthread_join(patients[i], NULL); // new
+   }
+
+   printf("---------------ALL PATIENTS TREATED---------------\n"); // new
+   fflush(stdout); // no need
+
+    /* send finished call to nurses and doctors*/
+   for (uint32_t i = 0; i < nnurses; i++) { // new
+      insert_pfifo(&hd->triage_queue, MAX_PATIENTS, 1); // new
+   }
+
+   for (uint32_t i = 0; i < ndoctors; i++) { // new
+      insert_pfifo(&hd->doctor_queue, MAX_PATIENTS, 1); // new
+   }
+
+   // end nurses treads
+   for (uint32_t i = 0; i < nnurses; i++) { // new
+      pthread_join(nurses[i], NULL); // new
+   }
+
+   // end doctors treads
+   for (uint32_t i = 0; i < ndoctors; i++) { // new
+      pthread_join(doctors[i], NULL); // new
+   }
 
    /* dummy code to show a very simple sequential behavior */
    // for(uint32_t i = 0; i < npatients; i++)

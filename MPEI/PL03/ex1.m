@@ -38,5 +38,21 @@ x = [0
 x2 = T^(30-1)*x;x
 fprintf("c: %f\n", x2(2))
 
+% (d) -  grafico a probabilidade de faltar a cada uma das 30 aulas, assumindo que a 
+%probabilidade de estar presente na primeira aula e de 85%
+v = [0.15;0.85];
 
+res = zeros(1,30);
+
+res(1) = 0.15;
+
+for i=2:30
+    v = T*v;
+    res(i) = v(1);
+end
+    
+plot(res,'*')
+    
+    
+    
 

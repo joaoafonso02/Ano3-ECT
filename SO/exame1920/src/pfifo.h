@@ -31,9 +31,9 @@ typedef struct
    uint32_t inp;  ///< point of insertion (queue tail)
    uint32_t out;  ///< point of retrieval (queue head)
    uint32_t cnt;  ///< number of items stored
-   pthread_mutex_t mutex;   // mutex creation
-   pthread_cond_t notEmpty; // init condition, we can only retrieve something from fifo if it is not empty
-   pthread_cond_t notFull;  // init condition, we can only insert something into fifo if it is not full
+   pthread_mutex_t mutex;   // mutex creation  // new
+   pthread_cond_t notEmpty; // init condition, we can only retrieve something from fifo if it is not empty  // new
+   pthread_cond_t notFull;  // init condition, we can only insert something into fifo if it is not full  // new
 } PriorityFIFO;
 
 void init_pfifo(PriorityFIFO* pfifo);
