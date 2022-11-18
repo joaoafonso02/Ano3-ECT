@@ -1,9 +1,9 @@
 {
   "tests": [
     {
-      "name": "Testes",
-      "setup": "python3 -m pip install -r requirements.txt",
-      "run": "python3 -m pytest",
+      "name": "Grading",
+      "setup": "sudo -H pip3 install pytest",
+      "run": "pytest",
       "input": "",
       "output": "",
       "comparison": "included",
