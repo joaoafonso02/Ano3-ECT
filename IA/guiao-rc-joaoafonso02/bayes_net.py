@@ -1,7 +1,5 @@
-
-
+from itertools import product, repeat
 class BayesNet:
-
     def __init__(self, ldep=None):  # Why not ldep={}? See footnote 1.
         if not ldep:
             ldep = {}
@@ -28,6 +26,19 @@ class BayesNet:
                     prob*=(p if val else 1-p)
         return prob
 
+    def ancestors(self, var):
+        pass
+
+    def conjunctions(self, lvars=None):
+        if lvars == None:
+            lvars = list(self.dependencies.keys())
+
+    def individualProb(self, var, val):
+        lvars = [ v for v in self.dependencies if v != var ]
+        lcomb = product([True, False], repeat=(len(lvars)))
+        lconj = [zip(lvars, comb) for comb in lcomb]
+        lconj = [ [(var, val)] + conj for conj in lconj ]
+        return sum(self.jointProb(conj) for conj in lconj)
 
 # Footnote 1:
 # Default arguments are evaluated on function definition,
@@ -35,4 +46,3 @@ class BayesNet:
 # This creates surprising behaviour when the default argument is mutable.
 # See:
 # http://docs.python-guide.org/en/latest/writing/gotchas/#mutable-default-arguments
-

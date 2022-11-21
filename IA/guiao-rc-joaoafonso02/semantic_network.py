@@ -1,5 +1,5 @@
 
-
+from collections import Counter
 # Guiao de representacao do conhecimento
 # -- Redes semanticas
 # 
@@ -216,3 +216,16 @@ class SemanticNetwork:
             local = self.query_local(e1=entity, rel=assoc)
 
         return desc_query + local
+
+    def query_induce(self, entity, assoc):
+        desc = self.query_down(entity, assoc)
+
+        values = [d.relation.entity2 for d in desc]
+
+        c = Counter(values).most_common(1)
+
+        for val, _ in c:    # o '_' quer dizer dont care, estamos a extrair o tuplo, mas só estamos interessados no 1o elemento, o val
+            return val
+
+        return None # não necessário, já retorna none anyways
+
