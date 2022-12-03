@@ -1,25 +1,30 @@
 import PyKCS11
 
 def main():
-    lib = 'usr/local/lib/libpteidpkes11.dls' # macOS different
+    lib = '/usr/local/lib/libpteidpkcs11.so'
 
     pkcs11 = PyKCS11.PyKCS11Lib()
 
     pkcs11.load(lib)
     slots = pkcs11.getSlotList( tokenPresent = True)
 
-    print( len(slots) )
+    # print( len(slots) )
 
     for slot in slots:
-        info = pkcs11.getSlotInfo( slot )
-        #print( info )
-        session =pkcs11.openSession( slot )
+        print(pkcs11.getTokenInfo(slot))
 
-        objs = session.findObjects()
+        all_attr = list(PyKCS11.CKA.keys())
+        #Filter attributes
+        all_attr = [e for e in all_attr if isinstance(e, int)]
 
-        for obj in objs:
-            attr = session.getAttributeValue( obj, [PyKCS11.CKA_LABEL])
-            print( attr[0])
+        session = pkcs11.openSession(slot)
+        for obj in session.findObjects():
+            # Get object attributes
+            attr = session.getAttributeValue(obj, all_attr)
+            # Create dictionary with attributes
+            attr = dict(zip(map(PyKCS11.CKA.get, all_attr), attr))
+
+            print('Label: ', attr['CKA_LABEL'])
 
 if __name__ == '__main__':
     main()
