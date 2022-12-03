@@ -14,13 +14,14 @@ for slot in slots:
     print(pkcs11.getTokenInfo(slot))
 
     all_attr = list(PyKCS11.CKA.keys())
-    #Filter attributes
+    # Filter attributes
     all_attr = [e for e in all_attr if isinstance(e, int)]
 
     session = pkcs11.openSession(slot)
     for obj in session.findObjects():
         # Get object attributes
         attr = session.getAttributeValue(obj, all_attr)
+
         # Create dictionary with attributes
         attr = dict(zip(map(PyKCS11.CKA.get, all_attr), attr))
 
@@ -37,7 +38,7 @@ for slot in slots:
                 private_key = obj
 
 
-text = b'Ola o meu nome e Andre Clerigo'
+text = b'WASSAPPPP my name is skrt'
 mechanism = PyKCS11.Mechanism(PyKCS11.CKM_SHA1_RSA_PKCS, None)
 signature = bytes(session.sign(private_key, text, mechanism))
 with open('sign.bin', 'wb') as f:
