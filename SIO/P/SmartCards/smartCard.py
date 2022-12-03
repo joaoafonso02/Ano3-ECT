@@ -12,7 +12,14 @@ def main():
 
     for slot in slots:
         info = pkcs11.getSlotInfo( slot )
-        print( info )
-        
+        #print( info )
+        session =pkcs11.openSession( slot )
+
+        objs = session.findObjects()
+
+        for obj in objs:
+            attr = session.getAttributeValue( obj, [PyKCS11.CKA_LABEL])
+            print( attr[0])
+
 if __name__ == '__main__':
     main()

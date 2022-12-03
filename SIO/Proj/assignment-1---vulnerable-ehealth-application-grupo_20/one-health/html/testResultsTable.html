@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> Add Rows To HTML Table From Array </title>
+          <meta charset="UTF-8">
+   
+
+         <style>
+        table.GeneratedTable {
+        width: 100%;
+        background-color: #ffffff;
+        border-collapse: collapse;
+        border-width: 2px;
+        border-color: #41484c;
+        border-style: solid;
+        color: #000000;
+        }
+
+        table.GeneratedTable td, table.GeneratedTable th {
+        border-width: 2px;
+        border-color: #41484c;
+        border-style: solid;
+        padding: 3px;
+        }
+
+        table.GeneratedTable thead {
+        background-color: #4fe9c4;
+        }
+    </style>
+
+    </head>
+    <body>
+        <br>
+    
+        <table id="table" class="GeneratedTable" >
+            <thead>
+            <!-- The Row Number 0 -->
+            <tr>
+                <th>Test</th>
+                <th>Result</th>
+                <th>Units</th>
+                <th>Reference Interval</th>
+            </tr>
+            <thead>
+            <tbody align="center" id="table_data_response">
+                       
+            </tbody>
+            
+        </table>
+        
+        <script>
+            function between(min, max) {  
+                return Math.floor(
+                    Math.random() * (max - min) + min
+                )
+            }
+            let nums = new Array(17);;
+            for (let i = 0; i < 17; i++) { 
+                nums[0] = between(3.5,5);
+                nums[1] = between(6, 31);
+                nums[2] = between(11,36);
+                nums[3] = between(38,126);
+                nums[4] = between(0.2,1.3);
+                nums[5] = between(7,17);
+                nums[6] = between(8.4,10.2);
+                nums[7] = between(98,107);
+                nums[8] = between(0.7,1.2);
+                nums[9] = between(65,105);
+                nums[10] = between(100,250);
+                nums[11] = between(0.65,1.05);
+                nums[12] = between(3.6,5);
+                nums[13] = between(137,145);
+                nums[14] = between(6.3,8.2);
+                nums[15] = between(227,467);
+            } 
+            console.log(nums)
+            // let nums[0] = between(3.5,5.0)
+            const arr = [ 
+                ["Albumin", "ALT (SGPT)", "AST (SGOT)", "Alkaline Phosphatase", "Total Billirubin", "BUN","Calcium","Chloride","Creatinine","Glucose","Lactate Dehydro.","Magnesium","Potassium","Sodium","Total Protein","Uric Acid"],  
+                nums, 
+                ["g/dL","IU/L","IU/L","mg/DL","mg/DL","mg/DL","mg/DL","mmol/L","mg/DL","mg/DL","IU/L","mmol/L","mmol/L","mmol/L","g/dL","mmol/L"],
+                ["3.5 - 5.0","6 - 31","11 - 36","38 - 126","0.2 - 1.3","7 - 17","8.4 - 10.2","98 - 107","0.7 - 1.2","65 - 105","100 - 250", "0.65 - 1.05","3.6 - 5.0","137 - 145","6.3 - 8.2","227 - 367/467"] 
+            ];
+
+            document.getElementById("table_data_response").innerHTML = ['<tr>', ...arr.reduce((acc, item, i) => {
+                const row = (acc[i] || '<td>') + item.join('<br/>') + '</td>';
+                acc.push(row);
+                return acc;
+            }, []), '</tr>'].join("");
+        </script>       
+        
+    </body>
+</html>

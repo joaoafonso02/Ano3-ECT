@@ -1,0 +1,13 @@
+services:
+  db:
+    build: ./DB
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'healthcorp'
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - "3306:3306"
+  api:
+    build: ./API
+    ports:
+      - 8081
