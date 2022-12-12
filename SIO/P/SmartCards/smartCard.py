@@ -14,7 +14,7 @@ def main():
         print(pkcs11.getTokenInfo(slot))
 
         all_attr = list(PyKCS11.CKA.keys())
-        #Filter attributes
+        # Filter attributes
         all_attr = [e for e in all_attr if isinstance(e, int)]
 
         session = pkcs11.openSession(slot)
