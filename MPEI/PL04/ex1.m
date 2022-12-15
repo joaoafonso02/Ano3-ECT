@@ -2,7 +2,6 @@
 N = 1e5;
 alpha = ['a':'z' 'A':'Z'];
 
-tic
 keys = generator(N,6,20,alpha);
 fprintf('1a) No keys: %d\n', length(keys));
 fprintf('    No unique: %d\n', length(unique(keys)));
