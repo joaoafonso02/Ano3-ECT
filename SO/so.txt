@@ -1,0 +1,1 @@
+make && ../bin/somm22 ../examples/p1.txt -b all -g mem -f f -m 0x2900
