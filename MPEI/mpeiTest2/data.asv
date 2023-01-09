@@ -1,0 +1,61 @@
+dic = readcell('films.txt', 'Delimiter','\t');
+
+u_data = load('u.data'); % carrega ficheiro
+u = u_data(1:end,1:2);
+eval = u_data(1:end,3);
+clear u_data;
+
+
+users = unique(u(:,1)); % Extrai IDs dos users
+No = length(users); % No de users
+save 'noUsers.mat' No
+
+Set= cell(No,1); % Usa cells
+for n = 1:No                % Para cada user
+    ind = find(u(:,1) == users(n));
+    Set{n} = [Set{n} u(ind,2)];
+end
+
+% guarda Set no ficheiro
+save 'users.mat' Set
+save 'movies.mat' dic
+
+
+K = 100;  % Número de funções de dispersão
+MinHashValue = inf(No,K);
+for i = 1:No
+    conjunto = Set{i}; 
+    for j = 1:length(conjunto)
+        chave = char(conjunto(j));
+        hash = zeros(1,K);
+        for kk = 1:K
+            chave = [chave num2str(kk)];
+            hash(kk) = DJB31MA(chave,127);
+        end
+        MinHashValue(i,:) = min([MinHashValue(i,:); hash]);  % Valor minimo da hash para este título
+    end
+end
+
+shingle_size=3;
+K = 150;  % Número de funções de dispersão
+MinHashSig = inf(length(dic),K);
+for i = 1:length(dic)
+    conjunto = lower(dic{i,1});
+    shingles = {};
+    for j= 1 : length(conjunto) - shingle_size+1  % Criacao dos shingles para cada filme
+        shingle = conjunto(j:j+shingle_size-1);
+        shingles{j} = shingle;
+    end
+    
+    for j = 1:length(shingles)
+        chave = char(shingles(j));
+        hash = zeros(1,K);
+        for kk = 1:K
+            chave = [chave num2str(kk)];
+            hash(kk) = DJB31MA(chave,127);
+        end
+        MinHashSig(i,:) = min([MinHashSig(i,:);hash]);  % Valor minimo da hash para este shingle
+    end
+end
+
+save 'data' 'MinHashValue' 'MinHashSig' 
