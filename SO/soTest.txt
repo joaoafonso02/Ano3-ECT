@@ -1,0 +1,13 @@
+SO - Teste treino
+1.
+	(a) 0 1 1
+
+	(b) As operações wait e signal, aplicáveis a variáveis de condição, são usadas para sincronizar threads em ambientes multithreading. Elas permitem que uma thread espere por uma determinada condição antes de continuar sua execução.
+
+A operação wait faz com que a thread atual bloqueie a execução até que outra thread execute a operação signal, informando que a condição esperada pelo thread bloqueado foi atendida. Quando a thread bloqueada é despertada, ela volta a ter prioridade de execução.
+
+Já as operações down e up, aplicáveis a semáforos, são usadas para controlar o acesso de threads a um recurso compartilhado. A operação down é usada para solicitar acesso ao recurso e, caso o recurso esteja disponível, a thread é permitida a continuar sua execução. Caso o recurso já esteja sendo utilizado por outra thread, a thread que chamou down é bloqueada até que o recurso esteja disponível novamente.
+
+A operação up é usada para liberar o acesso ao recurso, permitindo que outra thread possa utilizá-lo.
+
+Em resumo, as operações de variáveis de condição permitem que threads esperem por uma determinada condição, enquanto que as operações de semáforos permitem controlar o acesso de threads a um recurso compartilhado.

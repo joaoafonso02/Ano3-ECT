@@ -1,0 +1,940 @@
+\documentclass[twoside,openright]{report}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc} % Input UTF8
+\usepackage[backend=biber, style=ieee]{biblatex}
+\usepackage{csquotes}
+\usepackage[english]{babel} 
+\usepackage{blindtext} 
+\usepackage[printonlyused]{acronym}
+\usepackage{hyperref} 
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{enumitem}
+\usepackage{tabularx}
+
+\usepackage[first=0,last=9]{lcg}
+\newcommand{\ra}{\rand0.\arabic{rand}}
+\usepackage[table]{xcolor}
+
+\bibliography{bibliography}
+
+\begin{document}
+
+
+\def\titulo{Modular Framework for Data Acquisition and Annotation to
+Support Interaction Scenarios} % Modular Framework supporting Machine Learning for Data Acquisition & Annotation  to
+%Support Interaction Scenarios
+
+\def\data{November 15, 2022}
+\def\autores{Guilherme Mendonça Claro, \\
+Eduardo Lopes Fernandes, \\
+João Afonso Pereira Ferreira, \\
+Pedro Durval Cruzeiro, \\
+Tiago Figueira Mostardinha }  
+\def\autorescontactos{ (98432) gui@ua.pt, \\ (102648) edu.fernandes@ua.pt, \\ (103037) ferreiraafonsojoao@ua.pt, \\(103944) tiago.mostardinha@ua.pt}
+\def\versao{VERSAO 1}
+\def\departamento{DETI - Departamento de Electrónica, Telecomunicações e Informática}
+\def\empresa{University of Aveiro(\emph{\href{https://www.ua.pt}{UA}})}
+\def\logotipo{img/ua.pdf}
+\def\curso{\ac{miect}}
+
+
+%
+%%%%%% COVER %%%%%%
+%
+
+\renewcommand{\contentsname}{Index}
+\begin{titlepage}
+
+\begin{center}
+%
+\vspace*{20mm}
+%
+{\Huge \titulo}\\ 
+%
+\vspace{5mm}
+%
+{\Large \empresa}\\
+%
+\vspace{5mm}
+%
+{\LARGE \autores}\\ 
+%
+\vspace{10mm}
+%
+\begin{figure}[h]
+\center
+\includegraphics{\logotipo}
+\end{figure}
+%
+\vspace{5mm}
+\end{center}
+%
+\begin{flushright}
+\versao
+\end{flushright}
+\end{titlepage}
+
+%%  TITLE %%
+\title{%
+{\LARGE\textbf{Project Report}}\\
+\bigbreak
+{\LARGE\textit{Computer and Informatics Engineering's Project 2022/2023}} \\ 
+\bigbreak
+{\LARGE{Supervised by: Samuel Silva \& Fábio Barros }} \\ 
+\bigbreak
+\bigbreak
+{\Large \departamento \bigbreak \curso  \space \\
+\& \\ 
+\ac{leci} }
+}
+%
+
+%
+\date{\data}
+%
+\maketitle
+\pagenumbering{roman}
+
+\tableofcontents
+
+\listoffigures 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\clearpage
+\pagenumbering{arabic}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Abstract}
+\label{chap:abstract}
+This report presents a modular data acquisition framework to support interaction scenarios that aims to provide a flexible, customized and unified platform for collecting and cataloguing data from various input sources.
+The framework consists of several modules whose objective is to reduce content heterogeneity with their integration and configuration capabilities in order to find the best fitting solutions to support the specific needs of different use cases.
+At the heart of the system is the data insert module that takes a scalable design and is responsible for all treatment of data. It begins with acquisition from various sources such as sensors, camera and microphones, following this the content goes through an annotation process where it is catalogued and info is abstracted from it, finally data can also be filtered according to the specific requirements of interaction scenarios.
+A data storage unit is responsible for organizing and storing the collected content in a non-relational database. This module is only intended to communicate with the data insert module and in a secure and efficient manner.
+In addition to the previous components, there is also a Machine Learning (ML) pipeline in this architecture. This module's function is to optimally create adequate algorithms that can process received data and output models to be worked with.
+Connecting the pipeline, the data management and the user dashboard is an API that works as Middle ware and communication ground for the system.
+Overall, the proposed modular framework is projected to be a comprehensive and flexible platform for collecting, storing, analyzing and processing data from various sources. It is design to support a wide range of interaction scenarios and can be easily customized and integrated with other systems.
+
+
+
+
+
+
+
+\chapter{Introduction}
+\label{chap.intro}
+
+\begin{itemize}
+    \item Go deeper into point 1 of abstract, mentioning the uses, interests and significant developments of the area so far. Might also get into
+	expected evolution of the area
+	
+    \item Explain in a somewhat brief way (but with some detail), approach taken and how it will be managed (modular)
+https://www.overleaf.com/project/637379af99cf8533c98e6c37
+    \item Detailed explanation of the problem
+
+    \item State of the Art (SoA, SOTA) examples (briefly though)
+
+    \item Explain expected features of the project and how it provides solutions to the problem
+
+    \item Explain the structure of the report
+\end{itemize}
+
+
+
+\chapter{Background, Related work and State of the Art}
+\label{chap.relwork}
+%  workflow de machine learning, juntar related work com state of the art, sem divisão de secções
+In the early stages of the literature search related to our project's subject, it is possible to notice the relevance of the problem we are trying to solve, such as clues to take the first steps and meeting the most valuable tools to develop this modular framework. Therefore, we found some related work, for instance,  \textit{HaGRID}\footnote{\url{https://cutt.ly/S1WXm1Z}} that is one of the largest data sets for HGR (Hand Gesture Recognition) systems, this dataset contains 552,992 full \ac{hd} RGB images, along with \textit{Google ML Kit Pose Detection API}\footnote{\url{https://developers.google.com/ml-kit/vision/pose-detection}} is a lightweight versatile solution for app developers to detect the pose of a subject's body in real time from a continuous video or static image ( Movement Recognition using Machine Learning ). Besides these two, there is this \textit{article} about \textit{Hand Gesture Recognition Based on Computer Vision} \cite{oudah2020hand} that provides us a better idea about the concept of \ac{hci} on the implementation of interactive computational systems. Furthermore, this article gives us some \ac{hci} applications, such as "wearable glove-based sensors", a glove that captures hand motion and position using finger and wrist sensor grooves, strain sensors and control board, "camera vision based sensor", cameras that provide contact less communication between person and computer and it has the ability to identify gestures, and there is also this application called "Color-Based Recognition Using Glove Marker", a colorful glove that by following the colors of it enables the camera sensor to detect the exact location of the hand, whether it's the palm or the fingers. 
+In the same way that all these previous mentioned projects use as support \ac{hci} and \ac{ml}, it's intended for this modular framework to use these two technologies once obtaining data from \ac{hci} enables us to build and learn more effectively smarter and successful systems and using \ac{ml} allows the user to feed a computer algorithm an immense amount of data and have the computer analyze and make data-driven recommendations and decisions based on only the input data \cite{netapp2022} and for organization and methodology was used FAIR and \ac{dds} focused on the improvement of our data science team’s communication.
+
+
+Besides the identified related work, there are some general aspects related to the development of software and design architecture. Consequently, these topics that are directly connected to our architecture design are presented in the following section and subs sections.
+
+Quic/sense is a github repository that houses a library of pre-trained models on a variety of datasets which can be configured or used as a starting point for development
+The repository also includes tools for training, testing, visualizing and analyzing \ac{nlp} modes. To understand the use of these tools there is a set of demonstrative tutorials.
+However, despite all of these features, quic/sense lacks in flexibility, as it restricts users to the set of defined classes it can work with.
+Michel Kramer and Ivo Senner proposed a system architecture that relates to ours in the report " A modular software architecture for processing of big geospatial data in the cloud". In this work the investigators mention the "Processing Services", which is a component of their architecture that is capable to chain algorithms together as needed thus countering heterogeneity of data (which in their case was geospatial). This module receives a interpreted version of a workflow defined by the user to that be capable of selecting which algorithms to chain together and in what order, given this, the component would than access a distributed file system to gather the data to be processed. Finally it would store it again in the file system for later access.
+% and "quic sense" - \cite{quicsense2021}, a web app that has some of our main goals, such as the possibility to record video, add the video to a database and detect some movements and gestures through a video capture.
+
+%\begin{itemize}
+ %   \item Present which technologies went into the development of each and the reasoning behind its choice
+
+  %  \item Present our choice of technologies, explaining why we chose them in relation to the project ( not the development team). Also relate our choice of technologies to the choices other related works teams made.
+%\end{itemize}
+
+
+%\section{State of the Art}
+%\label{sec.art}
+For this project, relying on the information we gathered from related work (\ref{chap.relwork}), the next sections will expose the main reasons leading to the choice of \textit{technologies}, as well as the \textit{requirements} needed for the development of this project and the design of the \textit{framework's architecture}.
+
+\section{Technologies}
+\label{sec.technology}
+This module will present the technologies implemented during this project, by making a succinct  description of their purpose and the main reasons leading to their choice, likewise their main advantages and disadvantages. 
+
+\subsection{FrontEnd}
+For the \textit{FrontEnd} was chosen \textbf{React},  an open-source, declarative, and flexible JavaScript library, since it is a efficient, declarative and flexible programming language in a way that it can be used on a huge variety of platforms to build scalable and richer interactive user interfaces once the more the \ac{ui} is attractive the more they will be attached to our framework. But the question is, 
+
+\textit{why choose ReactJS when you have PHP, HTML 5, Flutter, or others?} \\
+
+
+That's because React  makes it easier to create a clean and better architecture that is friendly to testing and another advantage is that this technology allows data changes to be made without reloading the page.
+
+\subsection{BackEnd}
+For the \textit{FrontEnd} was chosen \textbf{Python}\footnote{\url{https://en.wikipedia.org/wiki/Python_(programming_language)}}, an high-level programming language. Its design philosophy emphasizes code readability with the use of significant indentation, since Python allows developing applications that are clear and simple as well as it is easy to learn and read. At the same time, it is flexible and easy to scale, which means it has various purposes.
+
+\textit{why choose Python when you have Java, JavaScript, Ruby, C\#, and PHP?} \\
+Any of these \textit{backend} programming languages are suitable for this development, however, Python is the most favoured \textit{backend} web development technology as it is appropriate for establish the connection with the latest technologies like \textbf{\ac{Iot}} and \textbf{\ac{ml}} in web applications, and in addition, it provides an easier connection with the \textit{frontend} and \textit{API's}.
+
+
+\section{Requirements}
+\label{sec.requirements}
+This module will present the requirements considered in the first phase of the project and their succinct description.
+
+\subsection{Functional Requirements}
+\begin{itemize}
+    \renewcommand{\labelitemi}{$\Rightarrow$}
+    \item Modular Framework must be able to capture relevant data for data acquisition, annotation and \ac{ml}
+\item 	 System should support multiple data acquisition modules, each of which specialized for a specific type of data source (sensors, cameras, microphones...)
+\item The system should provide tools for analyzing and visualizing the collected data
+
+    \item Framework should be able to store data and manage it in a scalable and efficient manner
+
+    \item Framework must support submission of contents and input data
+
+    \item System must be multi platform supporting  
+    \textit{Windows}, \textit{Linux} and  \textit{macOS}.
+\item The framework should provide a user-friendly dashboard to ease the process of interacting with the data and the system
+\item Data should be formatted in a standardized way
+\item The system should be capable of extracting relevant features of collected data
+\end{itemize}
+
+\subsection{Non-Functional Requirements}
+\begin{itemize}
+    \renewcommand{\labelitemi}{$\Rightarrow$}
+    \item The processing of each request should be done within 5 seconds
+
+    \item The WebSite should load in 3 seconds when the number of users is less than 1000 and 5 seconds (maximum) when the number is higher than 1000
+
+    \item The video recording should load within 4 seconds or less
+\item System should be scalable and able to handle a large volume of data from multiple sources
+\item Framework should be easy to maintain and extend, with an architecture that allows new data insert and analysis components to be added or removed easily
+\item Low latency and high performance so data can be collected and processed in real-time
+\item System should be intuitive and easy to understand with extended effort in documentation
+\item Easy to integrate and configure for different scenarios
+\item Have reliable ways to provide accurate algorithms to process data
+\item Support various data analysis techniques (regression, classification, clustering...)
+    
+    \item System must be secure with strict controls over the access to the data and the system itself
+\end{itemize}
+
+
+
+\section{Architecture}
+\label{sec.architecture}
+The present modular framework for data acquisition and annotation to support interaction scenarios is a type of software architecture that allows for the flexible and extensible integration of various data sources and annotation tools. 
+
+\begin{itemize}
+\item \textbf{The Dashboard} is for user interaction only, with the remaining components of the system being fully capable of functioning without it. This module aims to ease the comprehension of the system and allow clients to do tasks such as creating new projects, expanding datasets, visualizing and anlyzing data, recording and editing content and other features search as browsing.
+\item \textbf{The API} is the middleware of the system and controls the communication between the main components (processing services, data treatment modules and dashboard). It is in charge of displaying info needed to the users and manage the flow of acquired data to the insert module and filtered data to the pipeline.
+\item \textbf{The Data Insert} module is a more complex feature that is represented in a very high-level in this architecture model. However it is charged with doing the following:
+\begin{itemize}
+\item \textbf{Data Acquisition - } receives inputed data from the API and properly stores it in the database.
+\item \textbf{Data Annotation - } adds labels and tags defining what the acquired data relates to in order to later improve the accuracy of data analysis.
+\item \textbf{Data Filtering - } receives specified attributes to be searched for in the collected data to than choose the best fitting content to be fed into the ML pipeline for analysis. This process mainly works to reduce the ammount of unnecessary information based on the labels associated with the data.
+\end{itemize}
+\end{itemize}
+\begin{itemize}
+\item \textbf{The Database} is projected to be a non-relational storage unity to provide a secure and efficient flow of data between passive and active services.
+\item \textbf{The ML Pipeline} is the main processing feature of the architecture that iterates data through a series of stages in order to produce accurate models of various data types. In this module the content goes through an analysis process that is adaptative to the type of data to be worked with as well as to the goal that is meant to serve, thus this procedure can make use of various techniques such as regression, classification, clustering and dimensionality reduction. The output of this evaluation will be a set of trends, patterns and relationships to support better decision-making from the remaining pipeline
+\end{itemize}
+
+
+
+Overall, this modular framework for data acquisition offers several advantages over more monolithic approaches. It allows for greater flexibility and adaptability, as new data sources can be easily integrated without affecting the overall architecture. It also promotes code re-usability and maintainability, as the modular components can be developed and tested independently and shared among different projects. Additionally, this type of architecture can support a wide range of interaction scenarios, such as natural language processing, computer vision, and multi modal data fusion.
+
+
+This framework would likely consist of several key components, including the following conferred on the Fig. \ref{fig:FramArch} 
+
+
+\begin{figure} [h]
+    \centering
+    \includegraphics[width=\textwidth]{img/Arch.pdf}
+    \caption{Framework Architecture}
+    \label{fig:FramArch}
+\end{figure}
+
+
+\chapter{Conceptual Modelling / Theoretical Analysis}
+In the early stages of this project we found it hard to understand the understand the needs, goals, and behavior of the users of a product or service. Therefore, resorted to the creation of three different \textit{Personas} and \textit{use cases}. Personas are fictional characters that represent the different types of users that might use a product or service, and they are typically based on user research and real data about the target audience. Use cases, on the other hand, describe specific scenarios in which a user might interact with a product or service, and they outline the steps that the user would take and the goals that they would be trying to achieve.
+
+By creating these personas and use cases, our team was able to ensure that we are designing and developing products and services that are tailored to the needs and goals of their target users. This can increase user satisfaction, help improve the user experience, and ultimately make the product or service more successful. Additionally, personas and use cases were used to prioritize features and requirements, plan user testing, and communicate design decisions within the team and with stakeholders. Thus, in the next section will be presented the \textit{Personas} along side with their use cases that led to the definition of this framework's goals.
+
+\newpage
+\section{Personas/Actors and Use Cases}
+    
+\begin{enumerate}
+        \item \textbf{Sérgio Paulo creates a new set} \\
+
+    
+    
+    \begin{tabularx}{\textwidth} { 
+      | >{\raggedright\arraybackslash}X 
+      | >{\centering\arraybackslash}X 
+      | >{\raggedleft\arraybackslash}X | }
+     \hline
+    
+     \textbf{Title: Creation of dataset} (\textit{USE CASE}) \\
+     \hline
+     The researcher accesses our system/platform to create their models, after opening the project he selects the gesture features and set up some base classes of gestures(thumbs up, thumbs down, point up, point down). Then he proceeds to select thumbs up and record ten examples of that gesture, doing the same for the remaining classes. The researcher can now test the accuracy of his new dataset.  
+    \end{tabularx} 
+
+
+        \item \textbf{DoTaSet (Start-Up) completes dataset} \\
+
+       
+    
+    --------------------------------- MISSING USE CASE --------------------------------
+    
+    \begin{tabularx}{\textwidth} { 
+      | >{\raggedright\arraybackslash}X 
+      | >{\centering\arraybackslash}X 
+      | >{\raggedleft\arraybackslash}X | }
+     \hline
+    
+     \textbf{Title: Complete dataset} (\textit{USE CASE}) \\
+     \hline
+     BLA 
+     
+     BLA 
+     
+     BLA
+
+     bla
+
+     bla
+    \end{tabularx}
+    
+        \item \textbf{Rui Veloso uses dataset} \\
+        
+        
+        
+    \begin{tabularx}{\textwidth} { 
+      | >{\raggedright\arraybackslash}X 
+      | >{\centering\arraybackslash}X 
+      | >{\raggedleft\arraybackslash}X | }
+     \hline
+    
+     \textbf{Title: Use of dataset} (\textit{USE CASE}) \\
+     \hline
+    After a long day of brainstorming for his start-up, Rui Veloso, decided to approach an area that is not as developed as other technologies, which have a highly interest for a variety of enterprises, such as google, apple, governments and among others. Rui chose to do a project, that will focus on giving functionalities to gestures, poses and many other queues. However the main asset to have in order to produce a reliable application with those features is having a considerable dataset with accurate data to make an efficiency detection of gesture and poses. Fortunately, our framework, will provide to the users, such as Rui, the opportunity to download an open-source dataset to keep on improving his work. 
+    \end{tabularx}
+\end{enumerate}
+
+
+        \begin{figure} [h]
+            \centering
+            \includegraphics[width=\textwidth]{img/Sergio.png}
+            \caption{Sérgio Paulo - Persona}
+            \label{fig:Sergio}
+        \end{figure}
+
+      \begin{figure} 
+            \centering
+            \includegraphics[width=\textwidth]{img/DoTaSet.png}
+            \caption{DoTaSet - Persona}
+            \label{fig:DoTaSet}
+        \end{figure}
+        
+        \begin{figure}
+            \centering
+            \includegraphics[width=\textwidth]{img/Rui.png}
+            \caption{Rui Veloso - Persona}
+            \label{fig:Rui}
+        \end{figure}
+        
+\label{chap.concept}
+
+\chapter{Procedure / Implementation}
+\label{chap.procedure}
+To start the implementation of our \textit{framework} we started developing a simple client-server connection, 
+
+\chapter{Conclusion / summary}
+\label{chap.conclusion}
+In conclusion, the Modular Framework for Data Acquisition and Annotation to Support Interaction Scenarios is a versatile and powerful tool to collect and analyse data in a wide range of interaction scenarios, thus building models from it that can be used for various purposes in investigation and development.
+
+Its modular design combined with a user-friendly, well documented dashboard allows clients to easily customize the framework to their requirements and gain insights to improve decision making based on accurate up-to-date content.
+
+This framework stands now as an essential asset for success in today's data-driven world.
+
+
+
+
+\chapter{Work Distribution}
+\begin{itemize}
+    \item Eduardo Fernandes: 20\%
+    \item Guilherme Claro: 20\%
+    \item João Afonso Ferreira: 20\% - Background, Related work and State of the Art, Technologies, Requirements, Personas/Actors, Use Cases, Architecture
+    \item Pedro Durval: 20\% - Related Work, Conclusion, Architecture, Abstract, Requirements
+    \item Tiago Mostardinha: 20\%
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\printbibliography
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter*{Acronyms}
+\begin{acronym}
+\acro{ua}[UA]{Universidade de Aveiro}
+\acro{miect}[MIECT]{Mestrado Integrado em Engenharia de Computadores e Telemática}
+\acro{leci}[LECI]{Licenciatura em Engenharia de Computadores e Informática}
+\acro{hci}[HCI]{Human Computer Interaction}
+\acro{ml}[ML]{Machine Learning}
+\acro{hd}[HD]{High Definition}
+\acro{dds}[DDS]{Data Driven SCRUM}
+\acro{ui}[UI]{User Interface}
+\acro{Iot}[IoT]{Internet of things}
+\acro{nlp}[NLP]{Natural Processing Language}
+
+
+\end{acronym}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\end{document}
+\documentclass[twoside,openright]{report}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc} % Input UTF8
+\usepackage[backend=biber, style=ieee]{biblatex}
+\usepackage{csquotes}
+\usepackage[english]{babel} 
+\usepackage{blindtext} 
+\usepackage[printonlyused]{acronym}
+\usepackage{hyperref} 
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{enumitem}
+\usepackage{tabularx}
+
+\usepackage[first=0,last=9]{lcg}
+\newcommand{\ra}{\rand0.\arabic{rand}}
+\usepackage[table]{xcolor}
+
+\bibliography{bibliography}
+
+\begin{document}
+
+
+\def\titulo{Modular Framework for Data Acquisition and Annotation to
+Support Interaction Scenarios} % Modular Framework supporting Machine Learning for Data Acquisition & Annotation  to
+%Support Interaction Scenarios
+
+\def\data{November 15, 2022}
+\def\autores{Guilherme Mendonça Claro, \\
+Eduardo Lopes Fernandes, \\
+João Afonso Pereira Ferreira, \\
+Pedro Durval Cruzeiro, \\
+Tiago Figueira Mostardinha }  
+\def\autorescontactos{ (98432) gui@ua.pt, \\ (102648) edu.fernandes@ua.pt, \\ (103037) ferreiraafonsojoao@ua.pt, \\(103944) tiago.mostardinha@ua.pt}
+\def\versao{VERSAO 1}
+\def\departamento{DETI - Departamento de Electrónica, Telecomunicações e Informática}
+\def\empresa{University of Aveiro(\emph{\href{https://www.ua.pt}{UA}})}
+\def\logotipo{img/ua.pdf}
+\def\curso{\ac{miect}}
+
+
+%
+%%%%%% COVER %%%%%%
+%
+\renewcommand{\contentsname}{Index}
+\begin{titlepage}
+
+\begin{center}
+%
+\vspace*{20mm}
+%
+{\Huge \titulo}\\ 
+%
+\vspace{5mm}
+%
+{\Large \empresa}\\
+%
+\vspace{5mm}
+%
+{\LARGE \autores}\\ 
+%
+\vspace{10mm}
+%
+\begin{figure}[h]
+\center
+\includegraphics{\logotipo}
+\end{figure}
+%
+\vspace{5mm}
+\end{center}
+%
+\begin{flushright}
+\versao
+\end{flushright}
+\end{titlepage}
+
+%%  TITLE %%
+\title{%
+{\LARGE\textbf{Project Report}}\\
+\bigbreak
+{\LARGE\textit{Computer and Informatics Engineering's Project 2022/2023}} \\ 
+\bigbreak
+{\LARGE{Oriented by: Samuel Silva \& Fábio Barros }} \\ 
+\bigbreak
+\bigbreak
+{\Large \departamento \bigbreak \curso  \space \\
+\& \\ 
+\ac{leci} }
+}
+%
+
+%
+\date{\data}
+%
+\maketitle
+\pagenumbering{roman}
+
+\tableofcontents
+
+\listoffigures 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\clearpage
+\pagenumbering{arabic}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Abstract}
+\label{chap:abstract}
+Long time ago, when communication was taking its first steps, there were no languages, as result, humans had to develop abilities to turn communication possible. They came out with , non-verbal communication such as signs, \textit{smoke signals, conch shell trumpet}, among others.
+Nowadays, communication has surpassed all these previous steps and in human life is crucial. It helps growing interpersonal connections, benefits interchange of information and the advancement of society is due to the constant knowledge and ideas we share everyday, otherwise why would we have the ability to talk/move if we do not give it an use? 
+As a result, communication and interaction with other people leads to better understanding the next and eradicate possible misunderstandings, in other words, clarify dialogues. Generally, people interact either verbally or non-verbally, which means that communication can be shaped into speech or movements/gestures, correspondingly. 
+This project...
+
+\begin{itemize}
+    \item Rate at which data analysis (science) has been developing
+
+    \item Most common inconveniences found by workers, investigators and people connected to the area
+
+    \item Current methods (solutions) used for project specific Data Acquisition
+
+    \item Overview of our project goals, mentioning similarities and differences from current approaches
+
+\end{itemize}
+
+
+
+\chapter{Introduction}
+\label{chap.intro}
+
+\begin{itemize}
+    \item Go deeper into point 1 of abstract, mentioning the uses, interests and significant developments of the area so far. Might also get into
+	expected evolution of the area
+	
+    \item Explain in a somewhat brief way (but with some detail), approach taken and how it will be managed (modular)
+
+    \item Detailed explanation of the problem
+
+    \item State of the Art (SoA, SOTA) examples (briefly though)
+
+    \item Explain expected features of the project and how it provides solutions to the problem
+
+    \item Explain the structure of the report
+\end{itemize}
+
+
+
+\chapter{Related work}
+\label{chap.relwork}
+
+In the early stages of the literature search related to our project's subject, it is possible to notice the relevance of the problem we are trying to solve, such as clues to take the first steps and meeting the most valuable tools to develop this modular framework. Therefore, we found some related work, for instance,  \textit{HaGRID}\footnote{\url{https://cutt.ly/S1WXm1Z}} that is one of the largest data sets for HGR (Hand Gesture Recognition) systems, this dataset contains 552,992 full \ac{hd} RGB images, along with \textit{Google ML Kit Pose Detection API}\footnote{\url{https://developers.google.com/ml-kit/vision/pose-detection}} is a lightweight versatile solution for app developers to detect the pose of a subject's body in real time from a continuous video or static image ( Movement Recognition using Machine Learning ). Besides these two, there is this \textit{article} about \textit{Hand Gesture Recognition Based on Computer Vision} \cite{oudah2020hand} that provides us a better idea about the concept of \ac{hci} on the implementation of interactive computational systems. Furthermore, this article gives us some \ac{hci} applications, such as "wearable glove-based sensors", a glove that captures hand motion and position using finger and wrist sensor grooves, strain sensors and control board, "camera vision based sensor", cameras that provide contactless communication between person and computer and it has the ability to identify gestures, and there is also this application called "Color-Based Recognition Using Glove Marker", a colorful glove that by following the colors of it enables the camera sensor to detect the exact location of the hand, whether it's the palm or the fingers. 
+In the same way that all these previous mentioned projects use as support \ac{hci} and \ac{ml}, it's intended for this modular framework to use these two technologies once obtaining data from \ac{hci} enables us to build and learn more effectively smarter and successful systems and using \ac{ml} allows the user to feed a computer algorithm an immense amount of data and have the computer analyze and make data-driven recommendations and decisions based on only the input data \cite{netapp2022} and for organization and methodology was used FAIR and \ac{dds} focused on the improvement of our data science team’s communication.
+
+Besides the identified related work, there are some general aspects related to the development of software and design architecture. Consequently, these topics that are directly connected to our architecture design are presented in the following section and subssections.
+
+
+% and "quic sense" - \cite{quicsense2021}, a web app that has some of our main goals, such as the possibility to record video, add the video to a database and detect some movements and gestures through a video capture.
+
+%\begin{itemize}
+ %   \item Present which technologies went into the development of each and the reasoning behind its choice
+
+  %  \item Present our choice of technologies, explaining why we chose them in relation to the project ( not the development team). Also relate our choice of technologies to the choices other related works teams made.
+%\end{itemize}
+
+
+\section{State of the Art}
+\label{sec.art}
+For this project, relying on the information we gathered from related work (\ref{chap.relwork}), this section will expose the main reasons leading to the choice of \textit{technologies}, as well as the \textit{requirements} needed for the development of this project and the design of the \textit{framework's architecture}.
+
+\subsection{Technologies}
+\label{ssec.technology}
+This module will present the technologies implemented during this project, by making a succinct  description of their purpose and the main reasons leading to their choice, likewise their main advantages and disadvantages.
+
+\subsection{Requirements}
+\label{ssec.requirements}
+This module will present the requirements considering the first phase of the project and their succinct description, along side with personas/actors, scenarios and use cases that led to the definition of this framework's goals.
+
+\begin{itemize}
+    \item \textbf{Sérgio Paulo creates a new set} \\
+    \textbf{Use Case: }As a 32 years old Researcher at University of Oxford, coordinator of \textit{Human Computer Interaction} Scientific Area, Sérgio Paulo, in which is working on this project called "Interactive Ways Through Technology" needs to create some specific DataSets that he desires to implement in his recent project, such as poses directly connected with human communication. So this researcher is looking for a \textit{framework} that offers this kind of outcome. \\
+    
+    \textbf{Motivation:} Sérgio wants to contribute for the expansion of our DataBase since he intends to implement the purposes of this Modular Framework into his research.  \\
+
+
+\begin{tabularx}{\textwidth} { 
+  | >{\raggedright\arraybackslash}X 
+  | >{\centering\arraybackslash}X 
+  | >{\raggedleft\arraybackslash}X | }
+ \hline
+
+ \textbf{Title: Creation of dataset} (\textit{SCENARIO}) \\
+ \hline
+ The researcher accesses our system/platform to create their models, after opening the project he selects the gesture features and set up some base classes of gestures(thumbs up, thumbs down, point up, point down). Then he proceeds to select thumbs up and record ten examples of that gesture, doing the same for the remaining classes. The researcher can now test the accuracy of his new dataset.
+\end{tabularx}
+
+
+    \item \textbf{DoTaSet (Start-Up) completes dataset} \\
+    \textbf{Use Case: }DoTaSet, despite being a startup, has already developed a few data analysis projects. In their most recent work, they are developing a emotion detection platform through voice and image analysis, for this, they need a dataset that fits their purpose. Knowing how broad this project of theirs is DoTaSeT knows its impossible to find a public dataset that fits their needs, however developing one from scratch would be consuming too many resources that this startup doesn't possess. So, after some research, the company comes across our crowd-sourced platform. In this platform they find a database with some emotion recognition features, that even though it doesn't fully fulfill their needs, they can still upgrade complement it to check the rest of the needed features they were looking for, thus saving them an immense amount of work. After fully complemented, DoTaSeT also publishes their dataset to enable future use by third-parties that could find themselves in the same situation. Other users that eventually find their work would also be able to view the author, thus granting more visibility to the startup. These third-parties would then have the ability to choose from whichever iteration of the database development fits them the most, that is, if they conclude DoTaSeT's version has too much data that they wouldn't find useful, they could simply go for the previous iteration and adapt the rest themselves. 
+    
+    \textbf{Motivation:} DoTaSeT, a startup in the data analisys market, is looking to make a name for themselves, so they are developing complex projects that require large amounts of dedicated information and looking for new platforms to gain visibility on. 
+
+--------------------------------- MISSING SCENARIO --------------------------------
+
+\begin{tabularx}{\textwidth} { 
+  | >{\raggedright\arraybackslash}X 
+  | >{\centering\arraybackslash}X 
+  | >{\raggedleft\arraybackslash}X | }
+ \hline
+
+ \textbf{Title: Complete dataset} (\textit{SCENARIO}) \\
+ \hline
+ BLA BLA BLA
+\end{tabularx}
+
+    \item \textbf{Rui Veloso uses dataset} \\
+    \textbf{Use Case: }As an engineering student at University of OPorto, Rui Veloso is always trying to improve himself and always striving to learn new things. Therefore, he needs to use a specific dataset of hand movement, in this case, the waving action, so that he can apply it as a feature on his newest new project he is developing for the subject \textit{Human-Centered Artificial Intelligence}.
+    
+    
+    \textbf{Motivation:}Rui wants to implement \textit{waving dataset} for his latest project.
+    
+    
+\begin{tabularx}{\textwidth} { 
+  | >{\raggedright\arraybackslash}X 
+  | >{\centering\arraybackslash}X 
+  | >{\raggedleft\arraybackslash}X | }
+ \hline
+
+ \textbf{Title: Use of dataset} (\textit{SCENARIO}) \\
+ \hline
+After a long day of brainstorming for his start-up, Rui Veloso, decided to approach an area that is not as developed as other technologies, which have a highly interest for a variety of enterprises, such as google, apple, governments and among others. Rui chose to do a project, that will focus on giving functionalities to gestures, poses and many other queues. However the main asset to have in order to produce a reliable application with those features is having a considerable dataset with accurate data to make an efficiency detection of gesture and poses. Fortunately, our framework, will provide to the users, such as Rui, the opportunity to download an open-source dataset to keep on improving his work. 
+\end{tabularx}
+\end{itemize}
+
+\begin{figure}
+    \centering
+    \includegraphics[scale = 0.25 ]{img/GetImage.png}
+    \caption{Rui Veloso uses a specific dataset}
+    \label{fig:my_label}
+\end{figure}
+
+
+
+\subsection{Architecture}
+\label{ssec.architecture}
+ARCHITECTURE HERE
+
+
+\begin{enumerate}
+    \item Mention the uses and functionalities of our system
+
+    \item Requirement analysis
+
+    \item Briefly talk about the design pieces of the architecture and how they interact
+
+    \item Explain terminology (HCI, ML, FAIR, Data Driven SCRUM (DDS), ...)
+\end{enumerate}
+
+
+\chapter{Conceptual Modelling / Theoretical Analysis}
+\label{chap.concept}
+
+\chapter{Procedure / implementation}
+\label{chap.proce}
+
+\chapter{Conclusion / summary}
+\label{chap.conclusion}
+
+
+
+
+
+\chapter{Work Distribution}
+\begin{itemize}
+    \item Eduardo Fernandes: 20\%
+    \item Guilherme Claro: 20\%
+    \item João Afonso Ferreira: 20\%
+    \item Pedro Durval: 20\%
+    \item Tiago Mostardinha: 20\%
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\printbibliography
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter*{Acronyms}
+\begin{acronym}
+\acro{ua}[UA]{Universidade de Aveiro}
+\acro{miect}[MIECT]{Mestrado Integrado em Engenharia de Computadores e Telemática}
+\acro{leci}[LECI]{Licenciatura em Engenharia de Computadores e Informática}
+\acro{hci}[HCI]{Human Computer Interaction}
+\acro{ml}[ML]{Machine Learning}
+\acro{hd}[HD]{High Definition}
+\acro{dds}[DDS]{Data Driven SCRUM}
+\end{acronym}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\end{document}
+ \documentclass[twoside,openright]{report}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc} % Input UTF8
+\usepackage[backend=biber, style=ieee]{biblatex}
+\usepackage{csquotes}
+\usepackage[english]{babel} 
+\usepackage{blindtext} 
+\usepackage[printonlyused]{acronym}
+\usepackage{hyperref} 
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{enumitem}
+
+\bibliography{bibliography}
+
+\begin{document}
+
+
+\def\titulo{Modular Framework for Data Acquisition and Annotation to
+Support Interaction Scenarios} %Modular Framework supporting Machine Learning for Data Acquisition & Annotation  to
+%Support Interaction Scenarios
+
+\def\data{15/11/2022}
+\def\autores{Guilherme Mendonça Claro, \\
+Eduardo Lopes Fernandes, \\
+João Afonso Pereira Ferreira, \\
+Pedro Durval Cruzeiro, \\
+Tiago Figueira Mostardinha }  
+\def\autorescontactos{ (98432) gui@ua.pt, \\ (102648) edu.fernandes@ua.pt, \\ (103037) ferreiraafonsojoao@ua.pt, \\(103944) tiago.mostardinha@ua.pt}
+\def\versao{VERSAO 1}
+\def\departamento{DETI - Departamento de Electrónica, Telecomunicações e Informática}
+\def\empresa{University of Aveiro(\emph{\href{https://www.ua.pt}{UA}})}
+\def\logotipo{img/ua.pdf}
+\def\curso{\ac{miect}}
+
+
+%
+%%%%%% CAPA %%%%%%
+%
+\renewcommand{\contentsname}{Index}
+\begin{titlepage}
+
+\begin{center}
+%
+\vspace*{20mm}
+%
+{\Huge \titulo}\\ 
+%
+\vspace{5mm}
+%
+{\Large \empresa}\\
+%
+\vspace{5mm}
+%
+{\LARGE \autores}\\ 
+%
+\vspace{10mm}
+%
+\begin{figure}[h]
+\center
+\includegraphics{\logotipo}
+\end{figure}
+%
+\vspace{5mm}
+\end{center}
+%
+\begin{flushright}
+\versao
+\end{flushright}
+\end{titlepage}
+
+%%  Página de Título %%
+\title{%
+{\LARGE\textbf{Project Report}}\\
+\bigbreak
+{\LARGE\textit{Computer and Informatics Engineering's Project 2022/2023}} \\ 
+\bigbreak
+{\LARGE{Oriented by: Samuel Silva \& Fábio Barros }} \\ 
+\bigbreak
+\bigbreak
+{\Large \departamento \bigbreak \curso  \space \& \\ \ac{leci} }
+}
+%
+\author{%
+    \autores \\ 
+    \\\autorescontactos
+}
+%
+\date{\data}
+%
+\maketitle
+\pagenumbering{roman}
+
+\tableofcontents
+\listoffigures 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\clearpage
+\pagenumbering{arabic}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Abstract}
+\label{chap:abstract}
+Long time ago, when communication was taking its first steps, there were no languages, as result, humans had to develop abilities to turn communication possible. They came out with , non-verbal communication such as signs, \textit{smoke signals, conch shell trumpet}, among others.
+Nowadays, communication has surpassed all these previous steps and in human life is crucial. It helps growing interpersonal connections, benefits interchange of information and the advancement of society is due to the constant knowledge and ideas we share everyday, otherwise why would we have the ability to talk/move if we do not give it an use? 
+As a result, communication and interaction with other people leads to better understanding the next and eradicate possible misunderstandings, in other words, clarify dialogues. Generally, people interact either verbally or non-verbally, which means that communication can be shaped into speech or movements/gestures, correspondingly. 
+This project...
+
+\begin{itemize}
+    \item Rate at which data analysis (science) has been developing
+
+    \item Most common inconveniences found by workers, investigators and people connected to the area
+
+    \item Current methods (solutions) used for project specific Data Acquisition
+
+    \item Overview of our project goals, mentioning similarities and differences from current approaches
+
+\end{itemize}
+
+
+
+\chapter{Introduction}
+\label{chap.intro}
+
+\begin{itemize}
+    \item Go deeper into point 1 of abstract, mentioning the uses, interests and significant developments of the area so far. Might also get into
+	expected evolution of the area
+	
+    \item Explain in a somewhat brief way (but with some detail), approach taken and how it will be managed (modular)
+
+    \item Detailed explanation of the problem
+
+    \item State of the Art (SoA, SOTA) examples (briefly though)
+
+    \item Explain expected features of the project and how it provides solutions to the problem
+
+    \item Explain the structure of the report
+\end{itemize}
+
+
+
+\chapter{Related work}
+\label{chap.relwork}
+
+In the early stages of the literature search related to our project's subject, it is possible to notice the relevance of the problem we are trying to solve, such as clues to take the first steps and meeting the most valuable tools to develop this modular framework. Therefore, we found some related work, for instance,  \textit{HaGRID}\footnote{\url{https://cutt.ly/S1WXm1Z}} that is one of the largest data sets for HGR (Hand Gesture Recognition) systems, this dataset contains 552,992 full \ac{hd} RGB images, along with \textit{Google ML Kit Pose Detection API}\footnote{\url{https://developers.google.com/ml-kit/vision/pose-detection}} is a lightweight versatile solution for app developers to detect the pose of a subject's body in real time from a continuous video or static image ( Movement Recognition using Machine Learning ). Besides these two, there is this \textit{article} about \textit{Hand Gesture Recognition Based on Computer Vision} \cite{oudah2020hand} that provides us a better idea about the concept of \ac{hci} on the implementation of interactive computational systems. Furthermore, this article gives us some \ac{hci} applications, such as "wearable glove-based sensors", a glove that captures hand motion and position using finger and wrist sensor grooves, strain sensors and control board, "camera vision based sensor", cameras that provide contactless communication between person and computer and it has the ability to identify gestures, and there is also this application called "Color-Based Recognition Using Glove Marker", a colorful glove that by following the colors of it enables the camera sensor to detect the exact location of the hand, whether it's the palm or the fingers. 
+In the same way that all these previous mentioned projects use as support \ac{hci} and \ac{ml}, it's intended for this modular framework to use these two technologies once obtaining data from \ac{hci} enables us to build and learn more effectively smarter and successful systems and using \ac{ml} allows the user to feed a computer algorithm an immense amount of data and have the computer analyze and make data-driven recommendations and decisions based on only the input data \cite{netapp2022} and for organization and methodology was used FAIR and \ac{dds} focused on the improvement of our data science team’s communication.
+
+Besides the identified related work, there are some general aspects related to the development of software and design architecture. Consequently, these topics that are directly connected to our architecture design are presented in the following sections.
+
+
+% and "quic sense" - \cite{quicsense2021}, a web app that has some of our main goals, such as the possibility to record video, add the video to a database and detect some movements and gestures through a video capture.
+
+%\begin{itemize}
+ %   \item Present which technologies went into the development of each and the reasoning behind its choice
+
+  %  \item Present our choice of technologies, explaining why we chose them in relation to the project ( not the development team). Also relate our choice of technologies to the choices other related works teams made.
+%\end{itemize}
+
+
+\section{State of the Art}
+\label{sec.art}
+For this project, relying on the information we gathered from related work (\ref{chap.relwork}), this section will expose the main reasons leading to the choice of \textit{technologies \& methodology}, as well as the \textit{requirements} needed for the development of this project and the design of the \textit{framework's architecture}.
+
+\subsection{Technologies}
+\label{ssec.technology}
+This module will present the technologies implemented during this project, by making a succinct  description of their purpose and the main reasons leading to their choice, likewise their main advantages and disadvantages.
+
+\subsection{Requirements}
+\label{ssec.requirements}
+This module will present the requirements considering the first phase of the project and their succinct description, along side with personas/actors, scenarios and use cases that led to the definition of this framework's goals.
+
+
+\subsection{Architecture}
+\label{ssec.architecture}
+ARCHITECTURE HERE
+
+
+\begin{enumerate}
+    \item Mention the uses and functionalities of our system
+
+    \item Requirement analysis
+
+    \item Briefly talk about the design pieces of the architecture and how they interact
+
+    \item Explain terminology (HCI, ML, FAIR, Data Driven SCRUM (DDS), ...)
+\end{enumerate}
+
+
+\chapter{Conceptual Modelling / Theoretical Analysis}
+\label{chap.concept}
+
+\chapter{Procedure / implementation}
+\label{chap.proce}
+
+\chapter{Conclusion / summary}
+\label{chap.conclusion}
+
+
+
+
+
+\chapter{Work Distribution}
+\begin{itemize}
+    \item Eduardo Fernandes: 20\%
+    \item Guilherme Claro: 20\%
+    \item João Afonso Ferreira: 20\%
+    \item Pedro Durval: 20\%
+    \item Tiago Mostardinha: 20\%
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\printbibliography
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter*{Acronyms}
+\begin{acronym}
+\acro{ua}[UA]{Universidade de Aveiro}
+\acro{miect}[MIECT]{Mestrado Integrado em Engenharia de Computadores e Telemática}
+\acro{leci}[LECI]{Licenciatura em Engenharia de Computadores e Informática}
+\acro{hci}[HCI]{Human Computer Interaction}
+\acro{ml}[ML]{Machine Learning}
+\acro{hd}[HD]{High Definition}
+\acro{dds}[DDS]{Data Driven SCRUM}
+\end{acronym}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\end{document}
+
