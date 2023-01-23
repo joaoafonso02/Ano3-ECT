@@ -1,4 +1,4 @@
-# Ano1-ECT
+# Ano3-ECT
 Everything I did in My Third Year as a Computer and Telematics Engineering Student!
 
 # 1st Semester
@@ -11,7 +11,7 @@ Everything I did in My Third Year as a Computer and Telematics Engineering Stude
 - Bases de Dados (BD)
 - Interação Humano-computador (IHC)
 - Compiladores (CO)
-- Opção I
+- Introdução à Computação Gráfica (ICG)
 
 # Anual
 - Projeto em Engenharia de Computadores e Informática
