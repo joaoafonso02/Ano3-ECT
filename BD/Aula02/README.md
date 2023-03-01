@@ -7,19 +7,9 @@
 ## Exercício 2.1
 
 # a)
-| Entidade   	| Atributos 	|
-|------------	|-----------	|
-| Produto    	| Código    	|
-|            	| Preço     	|
-|            	| Nome      	|
-|            	| Taxa IVA  	|
-| Empresa    	| Nome      	|
-|            	| NIF       	|
-| Encomenda  	| Número    	|
-|            	| Data      	|
-| Fornecedor 	| NIF       	|
-|            	| Nome      	|
-|            	| Endereço  	|
-|            	| Fax       	|
-|            	| Pagamento 	|
-|            	| Código    	|
+| Entidades       	| Atributos                                                  	|
+|-----------------	|------------------------------------------------------------	|
+| <br><br>Produto 	|             Código<br>Preço<br>Nome<br>Taxa IVA            	|
+|     Empresa     	|                         Nome<br>NIF                        	|
+| Encomenda       	| Número <br>Data                                            	|
+| Fornecedor      	| NIF <br>Nome <br>Endereço <br>Fax <br>Pagamento <br>Código 	|
