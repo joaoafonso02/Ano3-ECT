@@ -16,7 +16,7 @@ Considere um Sistema de Gestão de Stocks de uma empresa. O presente exercício 
 #### *a)* Identifique as entidades, atributos e relações da base de dados.
 Identify the entities, attributes, and relationships of the database.
 
-```
+
 | Entidades  	| Atributos                                                  	|
 |------------	|------------------------------------------------------------	|
 |   Produto  	|             Código<br>Preço<br>Nome<br>Taxa IVA            	|
@@ -24,8 +24,6 @@ Identify the entities, attributes, and relationships of the database.
 | Encomenda  	| Número <br>Data                                            	|
 | Fornecedor 	| NIF <br>Nome <br>Endereço <br>Fax <br>Pagamento <br>Código 	|
 
-
-```
 
 #### *b)* Caracterize as relações quanto ao grau, cardinalidade e obrigatoriedade de participação das instâncias das entidades no relacionamento.
 Specify the relationships regarding the degree, cardinality and instances mandatory participation of the entities in the relationship.
