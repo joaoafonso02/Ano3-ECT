@@ -32,7 +32,7 @@ Specify the relationships regarding the degree, cardinality and instances mandat
 |        Relação        	| Grau 	| Cardinalidade 	| Obrigatoriedade de Participação 	|
 |:---------------------:	|:----:	|:-------------:	|:-------------------------------:	|
 |   Empresa --> Produto   	|   2  	|      1:N      	|             Produto             	|
-|  Produto --> Encomenda  	|   2  	|      M:N      	|            Encomenda            	|
+|  Produto --> Encomenda  	|   2  	|      1...N:M      	|            Encomenda            	|
 | Encomenda --> Forncedor 	|   2  	|      N:1      	|            Encomenda            	|
 
 
