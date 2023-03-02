@@ -6,12 +6,11 @@ public class ex3 {
     public static void main(String[] args) {
         Stack<Double> stack = new Stack<>();
         Scanner sc = new Scanner(System.in);
-        Double result = null;
+        Double result = null; // result of operation
 
         while (sc.hasNext()) {
             stack = new Stack<Double>();
             String[] input = sc.nextLine().split(" ");
-            // use operate function from ex2
 			do {
 				for (String s : input) { 
 					if (ex2.isNumber(s)) 
@@ -29,9 +28,9 @@ public class ex3 {
                         else
                             break; 
                     }
-                    System.out.println(stack); 
+                    System.out.println("Stack: " + stack); 
                 }
-            } while(result == null);    
+            } while(result == null);  
         }
         sc.close();
 
