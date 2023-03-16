@@ -32,8 +32,8 @@ Specify the relationships regarding the degree, cardinality and instances mandat
 |        Relação        	| Grau 	| Cardinalidade 	| Obrigatoriedade de Participação 	|
 |:---------------------:	|:----:	|:-------------:	|:-------------------------------:	|
 |   Empresa --> Produto   	|   2  	|      1:N      	|             Produto             	|
-|  Produto --> Encomenda  	|   2  	|      1...N:M      	|            Encomenda            	|
-| Encomenda --> Forncedor 	|   2  	|      N:1      	|            Encomenda            	|
+|  Produto --> Encomenda  	|   2  	|      1...N:M      	|            Produto            	|
+| Encomenda --> Forncedor 	|   2  	|      N:1      	|            Fornecedor            	|
 
 
 #### *c)* Desenvolva o desenho conceptual da base de dados com recurso a um diagrama entidade-relacionamento. Numa primeira fase, utilize lápis e papel para realizar o trabalho. Uma vez concluído o desenho em papel, transponha o diagrama para um formato eletrónico utilizando uma ferramenta gráfica como, por exemplo, o Microsoft Visio ou o Visual Paradigm.
