@@ -1,17 +1,26 @@
 # Compiladores
 
 ## Run Commands ANTL-4
-```SEMPRE QUE ALTERA ALGUMA COISA:
+
+Any changes:
+```bash
     antlr4-build
+```
 
-Para criar interpretador dependendo do tipo de dados:
+Create Visitor:
+```bash
     antlr4-visitor Calculator Interpreter Long
+```
 
-Para criar a main:
+Create Main:
+```bash
     antlr4-main -i -v Interpreter
+```
 
--> Para testar (Pelo menos o ex2_03):
+Test (ex2_03):
+```bash
     echo "( 1 + 2 ) / 3 * 10"  | antlr4-run
+```
 
 -> Para testar temos q avaliar a gramatica, no exercicio 4:
 
@@ -20,6 +29,6 @@ Para criar a main:
     Ou seja, operador, numero, numero
 
 Para ver tudo em árvore:
-
+```bash
     echo "( 1 + 2 ) / 3 * 10"  | antlr4-test -gui
 ```
