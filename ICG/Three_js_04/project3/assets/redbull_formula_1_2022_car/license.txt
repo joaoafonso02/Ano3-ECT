@@ -1,0 +1,11 @@
+Model Information:
+* title:	Redbull Formula 1 2022 Car
+* source:	https://sketchfab.com/3d-models/redbull-formula-1-2022-car-4fb7be044aba4b5aa3cf8fe046147d43
+* author:	Cenker Turhan (https://sketchfab.com/cenkerturhan1)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Redbull Formula 1 2022 Car" (https://sketchfab.com/3d-models/redbull-formula-1-2022-car-4fb7be044aba4b5aa3cf8fe046147d43) by Cenker Turhan (https://sketchfab.com/cenkerturhan1) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
