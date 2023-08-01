@@ -1,0 +1,3 @@
+[submodule "BD/DB_Project"]
+	path = BD/DB_Project
+	url = https://github.com/joaoafonso02/DB_Project
